@@ -82,7 +82,7 @@ class Day02 extends GenericDay {
     return validGames.sum;
   }
 
-  // return the max red * max green * max blue
+  // return the max(red) * max(green) * max(blue)
   int powerFromGame(int gameNum, List<Map<String, int>> aGame) {
     // ignore: inference_failure_on_function_invocation
     final red = aGame
@@ -102,7 +102,7 @@ class Day02 extends GenericDay {
     return red * green * blue;
   }
 
-  // return the list of the max
+  // return the list of the powers
   List<int> findThePowersOfGames(List<Map<dynamic, dynamic>> inputs) {
     return inputs
         .map((e) => powerFromGame(
