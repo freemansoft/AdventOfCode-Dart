@@ -46,16 +46,15 @@ class Day02 extends GenericDay {
 
   /// list of rounds
   /// each round is a 'red', 'green', 'blue'
+  /// The number of red, green and blue in each round must be < maxByColor
   bool isValidGame(List<Map<String, int>> rounds) {
     return rounds
             .map(
               (e) =>
-                  (!e.containsKey('red') ||
-                      e['red'] as int <= maxByColor['red']!) &&
+                  (!e.containsKey('red') || e['red']! <= maxByColor['red']!) &&
                   (!e.containsKey('green') ||
-                      e['green'] as int <= maxByColor['green']!) &&
-                  (!e.containsKey('blue') ||
-                      e['blue'] as int <= maxByColor['blue']!),
+                      e['green']! <= maxByColor['green']!) &&
+                  (!e.containsKey('blue') || e['blue']! <= maxByColor['blue']!),
             )
             .where((element) => element == true)
             .toList()
