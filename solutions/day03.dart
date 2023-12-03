@@ -165,6 +165,7 @@ class Day03 extends GenericDay {
     final numberLocations = lines.map(mapOfNumbers).toList();
     // each row contains list of flags describing if symbol or not
     final gearLocations = lines.map(mapOfGears).toList();
+    // find the power values for all the gears
     final ratioValues = findRatios(numberLocations, gearLocations);
     final result = ratioValues.sum;
     return result;
