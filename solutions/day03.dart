@@ -47,11 +47,23 @@ class Day03 extends GenericDay {
     return results;
   }
 
+  /// Return a list of locations where gears exist
+  /// There is a true or false for each character in the row
+  List<bool> mapOfGears(String aLine) {
+    final results = <bool>[];
+    for (var i = 0; i < aLine.length; i++) {
+      results.add(aLine[i].startsWith('*'));
+    }
+    return results;
+  }
+
   /// Walk the number map
   /// Scan the symbol map for any nearby : above, on and below
   /// Use a set so we don't have to worry about duplicate insertions
   Set<NumberLocation> findNumbersNearSymbols(
-      List<List<NumberLocation>> mapOfNumbers, List<List<bool>> mapOfSymbols) {
+    List<List<NumberLocation>> mapOfNumbers,
+    List<List<bool>> mapOfSymbols,
+  ) {
     // use a set so that we can insert same one multiple times
     final results = <NumberLocation>{};
     // use indexes because we need to do +/- one for scanning
@@ -79,6 +91,53 @@ class Day03 extends GenericDay {
     return results.nonNulls.toSet();
   }
 
+  /// Returns all the power calcualtions from all the part*part calculations
+  List<int> findRatios(
+    List<List<NumberLocation>> mapOfNumbers,
+    List<List<bool>> gearLocationsMap,
+  ) {
+    final results = <int>[];
+    // walk across the gear map
+    // we need the indexes so not using .map operators :-(
+    for (var gearRow = 0; gearRow < gearLocationsMap.length; gearRow++) {
+      for (var gearCol = 0;
+          gearCol < gearLocationsMap[gearRow].length;
+          gearCol++) {
+        // do work if we found a gear
+        if (gearLocationsMap[gearRow][gearCol]) {
+          print('gear $gearRow,$gearCol');
+          // use a set as a lazy dedupe
+          final oneGearParts = <NumberLocation>{};
+          // now look for all parts near the gear
+          for (var partRow = gearRow - 1; partRow <= gearRow + 1; partRow++) {
+            // BFI boundary check
+            if (partRow >= 0 && partRow < mapOfNumbers.length) {
+              // scan every location in the row
+              for (final location in mapOfNumbers[partRow]) {
+                if (gearCol >= location.start - 1 &&
+                    gearCol <= location.end + 1) {
+                  oneGearParts.add(location);
+                }
+              }
+            }
+          }
+          // oneGearParts is a set of NumberLocations, parts on this gear
+          //print(oneGearParts);
+          // no gear ratio of only one part
+          if (oneGearParts.length > 1) {
+            results.add(
+              oneGearParts
+                  .map((e) => e.value)
+                  .fold(1, (previousValue, element) => previousValue * element),
+            );
+            //print(results.last);
+          }
+        }
+      }
+    }
+    return results;
+  }
+
   @override
   List<String> parseInput() {
     final lines = input.getPerLine();
@@ -101,6 +160,13 @@ class Day03 extends GenericDay {
 
   @override
   int solvePart2() {
-    return 0;
+    final lines = parseInput();
+    // each row contains a list of objects describing where numbers are
+    final numberLocations = lines.map(mapOfNumbers).toList();
+    // each row contains list of flags describing if symbol or not
+    final gearLocations = lines.map(mapOfGears).toList();
+    final ratioValues = findRatios(numberLocations, gearLocations);
+    final result = ratioValues.sum;
+    return result;
   }
 }
