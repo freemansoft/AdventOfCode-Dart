@@ -65,9 +65,11 @@ class Day02 extends GenericDay {
   /// returns list of game numbers that are valid
   Iterable<int> findValidGames(Iterable<Map<dynamic, dynamic>> inputs) {
     return inputs
-        .map((e) => isValidGame(e['Rounds'] as List<Map<String, int>>)
-            ? e['Game'] as int
-            : null)
+        .map(
+          (e) => isValidGame(e['Rounds'] as List<Map<String, int>>)
+              ? e['Game'] as int
+              : null,
+        )
         .nonNulls;
   }
 
@@ -102,9 +104,12 @@ class Day02 extends GenericDay {
 
   // return the powers for every game
   Iterable<int> findThePowersOfGames(Iterable<Map<dynamic, dynamic>> inputs) {
-    return inputs.map((e) =>
-        powerFromGame(e['Game'] as int, e['Rounds'] as List<Map<String, int>>));
-    ;
+    return inputs.map(
+      (e) => powerFromGame(
+        e['Game'] as int,
+        e['Rounds'] as List<Map<String, int>>,
+      ),
+    );
   }
 
   @override

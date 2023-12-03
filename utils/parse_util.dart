@@ -1,5 +1,3 @@
-import 'index.dart';
-
 class ParseUtil {
   /// Throws an exception if any given String is not parseable.
   static List<int> stringListToIntList(List<String> strings) {
