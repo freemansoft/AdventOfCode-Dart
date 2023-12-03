@@ -1,5 +1,4 @@
 import '../utils/index.dart';
-import 'dart:math';
 
 class Day02 extends GenericDay {
   Day02() : super(2);
@@ -7,37 +6,38 @@ class Day02 extends GenericDay {
   // Maximum allowed by color
   final maxByColor = {'red': 12, 'green': 13, 'blue': 14};
 
-  /// returns a list of games
+  /// returns an Iterable of games from the input file
   ///   each game is a Map
   ///     "Game" :game_number
   ///     "Rounds": List of rounds.
   ///       each round is a Map of the red/green/blue
   @override
-  List<Map<dynamic, dynamic>> parseInput() {
+  Iterable<Map<dynamic, dynamic>> parseInput() {
     final lines = input.getPerLine();
     // each row is the "game" and the rounds
     final gameAndRounds = lines
         // process each row
-        .map((e) => {
-              // yes we run the same split(':') twice :-(
-              'Game': int.parse(e.split(':')[0].split(' ')[1]),
-              'Rounds': e
-                  // top level split game from rounds and toss the game number
-                  .split(':')[1]
-                  // now split the games in the round
-                  .split(';')
-                  .map(
-                    // split red/green/blue into a map
-                    (g) => {
-                      for (final v in g.split(',').map(
-                            (h) => h.trim().split(' '),
-                          ))
-                        v[1]: int.parse(v[0]),
-                    },
-                  )
-                  .toList(),
-            }) //
-        .toList();
+        .map(
+      (e) => {
+        // yes we run the same split(':') twice :-(
+        'Game': int.parse(e.split(':')[0].split(' ')[1]),
+        'Rounds': e
+            // top level split game from rounds and toss the game number
+            .split(':')[1]
+            // now split the games in the round
+            .split(';')
+            .map(
+              // split each round's red/green/blue into a map
+              (g) => {
+                for (final v in g.split(',').map(
+                      (h) => h.trim().split(' '),
+                    ))
+                  v[1]: int.parse(v[0]),
+              },
+            )
+            .toList(),
+      },
+    );
     return gameAndRounds;
   }
 
@@ -63,13 +63,12 @@ class Day02 extends GenericDay {
   }
 
   /// returns list of game numbers that are valid
-  List<int> findValidGames(List<Map<dynamic, dynamic>> inputs) {
+  Iterable<int> findValidGames(Iterable<Map<dynamic, dynamic>> inputs) {
     return inputs
         .map((e) => isValidGame(e['Rounds'] as List<Map<String, int>>)
             ? e['Game'] as int
             : null)
-        .nonNulls
-        .toList();
+        .nonNulls;
   }
 
   @override
@@ -101,12 +100,11 @@ class Day02 extends GenericDay {
     return red * green * blue;
   }
 
-  // return the list of the powers
-  List<int> findThePowersOfGames(List<Map<dynamic, dynamic>> inputs) {
-    return inputs
-        .map((e) => powerFromGame(
-            e['Game'] as int, e['Rounds'] as List<Map<String, int>>))
-        .toList();
+  // return the powers for every game
+  Iterable<int> findThePowersOfGames(Iterable<Map<dynamic, dynamic>> inputs) {
+    return inputs.map((e) =>
+        powerFromGame(e['Game'] as int, e['Rounds'] as List<Map<String, int>>));
+    ;
   }
 
   @override
