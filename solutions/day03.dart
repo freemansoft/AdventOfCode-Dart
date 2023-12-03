@@ -16,7 +16,7 @@ class NumberLocation {
 class Day03 extends GenericDay {
   Day03() : super(3);
 
-  /// map of each cell describing if symbol or not
+  /// turn each number in the row into a Number Location
   List<NumberLocation> mapOfNumbers(String aLine) {
     final results = <NumberLocation>[];
     var i = 0;
@@ -37,7 +37,8 @@ class Day03 extends GenericDay {
     return results;
   }
 
-  /// locations of everything not a '.' or digit
+  /// Return a list of locations where symbols exist
+  /// There is a true or false for each character in the row
   List<bool> mapOfSymbols(String aLine) {
     final results = <bool>[];
     for (var i = 0; i < aLine.length; i++) {
@@ -46,7 +47,9 @@ class Day03 extends GenericDay {
     return results;
   }
 
-  /// walk the number map scanning the symbol map for any nearby
+  /// Walk the number map
+  /// Scan the symbol map for any nearby : above, on and below
+  /// Use a set so we don't have to worry about duplicate insertions
   Set<NumberLocation> findNumbersNearSymbols(
       List<List<NumberLocation>> mapOfNumbers, List<List<bool>> mapOfSymbols) {
     // use a set so that we can insert same one multiple times
