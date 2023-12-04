@@ -19,7 +19,8 @@ class Card {
 
   @override
   String toString() {
-    return '{ "game": $game , "winningNumbers": $winningNumbers, "cardNumbers": $cardNumbers}';
+    return '{ "game": $game , "winningNumbers": $winningNumbers,'
+        ' "cardNumbers": $cardNumbers}';
   }
 }
 
@@ -68,14 +69,16 @@ class Day04 extends GenericDay {
     final wins = foo.map((e) => e.numWinning);
     final powerScores =
         foo.map((e) => e.numWinning > 0 ? pow(2, e.numWinning - 1) : 0);
-    print(
-        'numWins: ${wins.sum}, score: ${powerScores.sum as int} wins: $wins , scores: $powerScores');
+    print('numWins: ${wins.sum}, score: ${powerScores.sum as int} wins: $wins '
+        ', scores: $powerScores');
     return powerScores.sum as int;
   }
 
+  /// recursively descend to add the cards
   void calc(List<int> wins, int startIndex, List<int> currentCounts) {
     currentCounts[startIndex] += 1;
     if (wins[startIndex] > 0) {
+      // use an iterator because we add by index later
       for (var j = 1;
           startIndex + j < wins.length && j <= wins[startIndex];
           j++) {
@@ -89,6 +92,7 @@ class Day04 extends GenericDay {
     final input = parseInput();
     final wins = input.map((e) => e.numWinning).toList();
     final numCards = List<int>.filled(wins.length, 0);
+    // use an itertor because we add by index later
     for (var i = 0; i < wins.length; i++) {
       calc(wins, i, numCards);
     }

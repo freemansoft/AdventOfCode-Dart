@@ -93,7 +93,7 @@ class Day01 extends GenericDay {
     final rawText = parseInput();
 
     final junkAndDigits = wordsToDigetsString(rawText);
-    // The number of representation of a row is the first number concat with last
+    // The number representation of a row is the first number concat with last
     // or first*10+last
     final firstLastDigits =
         junkAndDigits.map((e) => e.first * 10 + e.last).toList();

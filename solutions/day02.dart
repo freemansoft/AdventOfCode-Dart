@@ -97,8 +97,6 @@ class Day02 extends GenericDay {
         .map((e) => e['blue'] ?? 0)
         .nonNulls
         .reduce((value, element) => value > element ? value : element);
-    // print(
-    //     '$gameNum ==> red: $red, green: $green, blue: $blue ==> ${red * green * blue}');
     return red * green * blue;
   }
 
