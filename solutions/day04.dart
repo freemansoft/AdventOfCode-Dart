@@ -93,6 +93,7 @@ class Day04 extends GenericDay {
     final wins = input.map((e) => e.numWinning).toList();
     final numCards = List<int>.filled(wins.length, 0);
     // use an itertor because we add by index later
+    // recursively descend each card
     for (var i = 0; i < wins.length; i++) {
       calc(wins, i, numCards);
     }
