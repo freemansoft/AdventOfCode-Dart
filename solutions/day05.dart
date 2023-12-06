@@ -59,6 +59,8 @@ class Day05 extends GenericDay {
     //'location',
   ];
 
+  static const int maxIntValue = -1 >>> 1;
+
   @override
   int solvePart1() {
     parseInput();
@@ -77,7 +79,7 @@ class Day05 extends GenericDay {
     }).toList();
     print('wtf: $wtf');
     return wtf.fold(
-        999999999999999,
+        maxIntValue,
         (previousValue, element) =>
             previousValue < element ? previousValue : element);
   }
