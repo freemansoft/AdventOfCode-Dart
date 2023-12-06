@@ -6,6 +6,7 @@ class Day06 extends GenericDay {
   /// list of records time and distance
   late List<(int, int)> linesAsRecords;
 
+  /// created this to retain typing
   (int, int) buildRecord({
     required int time,
     required int distance,
@@ -18,7 +19,8 @@ class Day06 extends GenericDay {
     final linesAsLists =
         input.getPerLine().map((e) => e.split(RegExp(r"\s+"))).toList();
     //print(linesAsLists);
-    //print(IterableZip([linesAsLists[0], linesAsLists[1]]).toList());
+    // print(
+    //     IterableZip([linesAsLists[0].sublist(1), linesAsLists[1].sublist(1)]));
     // should change this to a map
     linesAsRecords =
         IterableZip([linesAsLists[0].sublist(1), linesAsLists[1].sublist(1)])
