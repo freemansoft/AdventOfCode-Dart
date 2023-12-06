@@ -3,6 +3,7 @@ import '../utils/index.dart';
 class Day06 extends GenericDay {
   Day06() : super(6);
 
+  /// list of records time and distance
   late List<(int, int)> linesAsRecords;
 
   (int, int) buildRecord({
@@ -28,21 +29,6 @@ class Day06 extends GenericDay {
             .toList();
   }
 
-  @override
-  int solvePart1() {
-    parseInput();
-    //print(linesAsRecords);
-    // the number of time slots above distance for each run
-    var allRuns = linesAsRecords.map((e) => getNumAboveSpeed(e.$1, e.$2));
-    var answer = allRuns.reduce((value, element) => value * element);
-    return answer;
-  }
-
-  @override
-  int solvePart2() {
-    return 0;
-  }
-
   /// calculates the number of time slots that would be above the distance
   int getNumAboveSpeed(int time, int distance) {
     var speedsAtSeconds = Iterable<int>.generate(time)
@@ -50,5 +36,20 @@ class Day06 extends GenericDay {
         .reduce((value, element) => value + element);
     //print('number above record: $speedsAtSeconds');
     return speedsAtSeconds;
+  }
+
+  @override
+  int solvePart1() {
+    parseInput();
+    //print(linesAsRecords);
+    // the number of time slots above distance for each run
+    final allRuns = linesAsRecords.map((e) => getNumAboveSpeed(e.$1, e.$2));
+    final answer = allRuns.reduce((value, element) => value * element);
+    return answer;
+  }
+
+  @override
+  int solvePart2() {
+    return 0;
   }
 }
