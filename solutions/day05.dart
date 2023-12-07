@@ -102,9 +102,12 @@ class Day05 extends GenericDay {
   @override
   int solvePart2() {
     final rawLines = parseInput();
+    // even indexes are start and odd indexes are length
     final rawSeedInfo = rawLines[0].split(' ').sublist(1);
+    // iterators one for each seed range
     final ourIterators = <Iterable<int>>[];
 
+    // statistics
     var debugCount = 0;
     // create iterators for each of the seed ranges
     // do not lists which could be huge
