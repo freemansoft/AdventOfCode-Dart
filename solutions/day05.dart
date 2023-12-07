@@ -19,17 +19,11 @@ class Day05 extends GenericDay {
     return oneRecord;
   }
 
-  late List<int> seeds;
-  late List<Object> linesAsRecords;
-  late Map<String, TheMap> lineMap;
-
-  @override
-  parseInput() {
-    final lines = input.getPerLine();
-
-    seeds = lines[0].split(' ').sublist(1).map(int.parse).toList();
-
-    linesAsRecords = lines
+  /// The meat of the whole thing
+  /// Iterate across lines accumulating them into records
+  List<Object> convertLinesToRecords(List<String> lines) {
+    // seed row then blank row then the map tables so (2)
+    final linesAsRecords = lines
         .sublist(2)
         .map(
           (e) => e.isEmpty
@@ -37,16 +31,17 @@ class Day05 extends GenericDay {
               : _accumulator.add(e.split(' ')),
         )
         .nonNulls
+        // must toList so we can add last one
+        // could we have extended the Iterable?
         .toList();
     //  may not be a blank line at the end so we have a dangling accumulation
     if (_accumulator.isNotEmpty) {
       linesAsRecords.add(createAndResetAccumulator());
     }
-
-    lineMap = Map.fromEntries(
-      linesAsRecords.map((e) => MapEntry((e as TheMap).from, e)),
-    );
+    return linesAsRecords;
   }
+
+  late Map<String, TheMap> lineMap;
 
   List<String> chain = [
     'seed',
@@ -59,26 +54,46 @@ class Day05 extends GenericDay {
     //'location',
   ];
 
+  int locationForSeed(int seedNum) {
+    final soil = lineMap[chain[0]]!.destRange(seedNum);
+    final fertilizer = lineMap[chain[1]]!.destRange(soil);
+    final water = lineMap[chain[2]]!.destRange(fertilizer);
+    final light = lineMap[chain[3]]!.destRange(water);
+    final temperature = lineMap[chain[4]]!.destRange(light);
+    final humidity = lineMap[chain[5]]!.destRange(temperature);
+    final location = lineMap[chain[6]]!.destRange(humidity);
+    return location;
+  }
+
   static const int maxIntValue = -1 >>> 1;
+
+  // populates seeds and lineMap
+  @override
+  List<String> parseInput() {
+    final rawLines = input.getPerLine();
+
+    final linesAsRecords = convertLinesToRecords(rawLines);
+
+    // keyed by the from part of the records
+    lineMap = Map.fromEntries(
+      linesAsRecords.map((e) => MapEntry((e as TheMap).from, e)),
+    );
+
+    return rawLines;
+  }
 
   @override
   int solvePart1() {
-    parseInput();
-    print(seeds);
-    print(linesAsRecords);
+    final rawLines = parseInput();
+    late Iterable<int> seeds;
 
-    final wtf = seeds.map((e) {
-      final soil = lineMap[chain[0]]!.destRange(e);
-      final fertilizer = lineMap[chain[1]]!.destRange(soil);
-      final water = lineMap[chain[2]]!.destRange(fertilizer);
-      final light = lineMap[chain[3]]!.destRange(water);
-      final temperature = lineMap[chain[4]]!.destRange(light);
-      final humidity = lineMap[chain[5]]!.destRange(temperature);
-      final location = lineMap[chain[6]]!.destRange(humidity);
-      return location;
-    }).toList();
-    print('wtf: $wtf');
-    return wtf.fold(
+    seeds = rawLines[0].split(' ').sublist(1).map(int.parse);
+
+    print(seeds);
+
+    final allSeeds = seeds.map(locationForSeed);
+    print('allSeeds: ${allSeeds.toList()}');
+    return allSeeds.fold(
         maxIntValue,
         (previousValue, element) =>
             previousValue < element ? previousValue : element);
@@ -86,7 +101,23 @@ class Day05 extends GenericDay {
 
   @override
   int solvePart2() {
-    return 0;
+    final rawLines = parseInput();
+    final rawSeedInfo = rawLines[0].split(' ').sublist(1);
+    final ourIterators = <Iterable<int>>[];
+    // create iterators for each of the seed ranges
+    // do not lists which could be huge
+    for (var i = 0; i < rawSeedInfo.length; i = i + 2) {
+      final start = int.parse(rawSeedInfo[i]);
+      final count = int.parse(rawSeedInfo[i + 1]);
+      ourIterators.add(Iterable.generate(count, (counter) => start + counter));
+    }
+    // use the combined iterator so this is all lazy
+    // run the drill down resolution on each item in all of the iterators
+    // would be a great place for scater/gather
+    return CombinedIterableView(ourIterators).map(locationForSeed).fold(
+        maxIntValue,
+        (previousValue, element) =>
+            previousValue < element ? previousValue : element);
   }
 }
 
