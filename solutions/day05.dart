@@ -85,14 +85,14 @@ class Day05 extends GenericDay {
   @override
   int solvePart1() {
     final rawLines = parseInput();
+
     late Iterable<int> seeds;
-
     seeds = rawLines[0].split(' ').sublist(1).map(int.parse);
-
     print(seeds);
 
     final allSeeds = seeds.map(locationForSeed);
     print('allSeeds: ${allSeeds.toList()}');
+
     return allSeeds.fold(
         maxIntValue,
         (previousValue, element) =>
@@ -104,12 +104,18 @@ class Day05 extends GenericDay {
     final rawLines = parseInput();
     final rawSeedInfo = rawLines[0].split(' ').sublist(1);
     final ourIterators = <Iterable<int>>[];
+
+    var debugCount = 0;
     // create iterators for each of the seed ranges
     // do not lists which could be huge
     for (var i = 0; i < rawSeedInfo.length; i = i + 2) {
       final start = int.parse(rawSeedInfo[i]);
       final count = int.parse(rawSeedInfo[i + 1]);
       ourIterators.add(Iterable.generate(count, (counter) => start + counter));
+      // some code to understand the size of the issue
+      debugCount = debugCount + count;
+      print('adding iterator $start -> ${start + count} ($count) '
+          'running iteration count is $debugCount');
     }
     // use the combined iterator so this is all lazy
     // run the drill down resolution on each item in all of the iterators
