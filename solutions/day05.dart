@@ -88,10 +88,10 @@ class Day05 extends GenericDay {
 
     late Iterable<int> seeds;
     seeds = rawLines[0].split(' ').sublist(1).map(int.parse);
-    print(seeds);
+    print('part 1 - ${seeds.length} seeds under test: $seeds');
 
     final allSeeds = seeds.map(locationForSeed);
-    print('allSeeds: ${allSeeds.toList()}');
+    print('part 1 - allSeeds: ${allSeeds.toList()}');
 
     return allSeeds.fold(
         maxIntValue,
@@ -114,9 +114,10 @@ class Day05 extends GenericDay {
       ourIterators.add(Iterable.generate(count, (counter) => start + counter));
       // some code to understand the size of the issue
       debugCount = debugCount + count;
-      print('adding iterator $start -> ${start + count} ($count) '
-          'running iteration count is $debugCount');
+      print('part 2 - adding iterator $start -> ${start + count} : $count '
+          'aggregated iteration count is $debugCount');
     }
+    print('part 2 - $debugCount iterations');
     // use the combined iterator so this is all lazy
     // run the drill down resolution on each item in all of the iterators
     // would be a great place for scater/gather
