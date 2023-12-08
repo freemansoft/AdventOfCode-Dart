@@ -44,9 +44,25 @@ class Day08 extends GenericDay {
   /// but I think it is close
   @override
   int solvePart2() {
+    print('part 2:');
     final minimumSteps = steps.keys
+        // find all the starting spots
         .where((element) => element.endsWith('A') && !element.startsWith('A'))
-        .map((e) {
+        .map(calcIterations)
+        .toList();
+    print('minimum steps $minimumSteps');
+    final answer = minimumSteps.reduce((value, element) => lcm(value, element));
+    final multiplesPerStep = minimumSteps.map((e) => answer / e).toList();
+    print('least common multiple $answer');
+    print('divisor per step $multiplesPerStep');
+    return answer;
+  }
+  // (6837, 10519, 1314, 11045, 19987)
+  // (1017095887470630.0, 661078484897490.0, 5292149606268415.0, 629595706893318.0, 347920377377130.0)
+
+  int calcIterations(String e) {
+    {
+      print('starting spot $e');
       // all paths are the same so just randomly pick one
       var currentLocation = e;
       // endsWidth instead of ==
@@ -60,15 +76,8 @@ class Day08 extends GenericDay {
         currentLocation = steps[currentLocation]![rl[locationIndex]]!;
       }
       return index - rl.length;
-    });
-    print(minimumSteps);
-    final answer = minimumSteps.reduce((value, element) => lcm(value, element));
-    final multiplesPerStep = minimumSteps.map((e) => answer / e);
-    print(multiplesPerStep);
-    return answer;
+    }
   }
-  // (6837, 10519, 1314, 11045, 19987)
-  // (1017095887470630.0, 661078484897490.0, 5292149606268415.0, 629595706893318.0, 347920377377130.0)
 
   /// least common multiple
   int lcm(int a, int b) => (a * b) ~/ gcd(a, b);
