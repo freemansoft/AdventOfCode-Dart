@@ -38,21 +38,44 @@ class Day09 extends GenericDay {
     // for each row,
     // reverse the steps because the 2nd phase is bottom up
     // then walk from the beginning to end calcuating the last value
+    // didn't want to use an iterator and map() only go forward
     final reversed = diffs.map((e) => e.reversed).toList();
-    print('reversed: $reversed');
+    //print('reversed: $reversed');
     final answer = reversed
         .map(
           (e) => e.reduce((value, element) => [element.last + value.last]),
         )
         .toList();
-    print('answer:  aggregating: ${answer.length} - $answer');
+    //print('answer:  aggregating: ${answer.length} - $answer');
     return answer.map((e) => e[0]).sum;
   }
 
   @override
   int solvePart2() {
     final Iterable<List<List<int>>> lines = parseInput();
+    //print('lines: $lines');
+    // for each sample
+    // calculate the diffs for the last row
+    final diffs = lines
+        .map(
+          (e) => calcDiffs(e.last),
+        )
+        .toList();
+    //print('diffs: $diffs');
+    // for each row,
+    // reverse the steps because the 2nd phase is bottom up
+    // didn't want to use an iterator and map() only go forward
+    final reversed = diffs.map((e) => e.reversed).toList();
+    print('reversed: $reversed');
 
-    return 0;
+    final answer = reversed
+        .map(
+          (e) =>
+              e.fold(0, (previousValue, element) => element[0] - previousValue),
+          //(e) => e.reduce((value, element) => [value.first - element.first]),
+        )
+        .toList();
+    print('answer:  aggregating: ${answer.length} - $answer');
+    return answer.sum;
   }
 }
