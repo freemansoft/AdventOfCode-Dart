@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../utils/index.dart';
 
 class Coordinate {
@@ -91,8 +93,8 @@ class Day10 extends GenericDay {
     final results = <Coordinate>{};
 
     for (final a in validDirections) {
-      var look = a[0];
-      var lookback = a[1];
+      final look = a[0];
+      final lookback = a[1];
       if (startLocation.row + look.row >= 0 &&
           startLocation.row + look.row < cellMap.length &&
           startLocation.col + look.col >= 0 &&
@@ -110,45 +112,48 @@ class Day10 extends GenericDay {
     return results;
   }
 
-  dynamic calcRoute({
+  List<Coordinate> calcRoute({
     required Coordinate start,
     required Coordinate firstStep,
     required List<List<Set<Coordinate>>> cellMap,
-    required List<Coordinate> alreadyWalked,
   }) {
-    //print('  depth - ${alreadyWalked.length}');
-    if (alreadyWalked.isEmpty) {
-      //print(' calcRoute: $start, firstStep: $firstStep');
-    }
-    if (start == firstStep) {
-      //print('  Returning for $firstStep - $alreadyWalked.length');
-      return alreadyWalked;
-    } else if (alreadyWalked.contains(firstStep)) {
-      //print('  Returning for $firstStep - ${alreadyWalked.length}');
-      //print('  Returning for $firstStep - $alreadyWalked');
-      return;
-    }
-    {
+    var thisStep = firstStep;
+    final alreadyWalked = <Coordinate>[firstStep];
+    while (thisStep != start) {
+      // two directions for each
+      final nextStepDiffs = cellMap[thisStep.row][thisStep.col];
+      if (nextStepDiffs.isEmpty) {
+        exit(-1); // ran off the path
+      }
       // print(
-      //   '  walking from $firstStep '
-      //   'cellmap ${cellMap[firstStep.row][firstStep.col]} '
-      //   'alreadyWalked: $alreadyWalked',
-      // );
-      // for each way out
-      var x = cellMap[firstStep.row][firstStep.col].map((e) => calcRoute(
-            start: start,
-            firstStep: Coordinate(
-              row: firstStep.row + e.row,
-              col: firstStep.col + e.col,
-            ),
-            cellMap: cellMap,
-            alreadyWalked: List.from(alreadyWalked)..add(firstStep),
-          ));
-      //print('  Returning for $firstStep - ${x}');
-      // x.nonNulls is a nested all the way down to the array that is the answer
-      // x.nonNulls.first is the first step
-      return x.nonNulls.last;
+      //     'looking at $thisStep applying diffs $nextStepDiffs - ${alreadyWalked.length}');
+      // can't break out of a for(x in y)
+      var done = false;
+      for (final nextStepDiff in nextStepDiffs) {
+        if (!done) {
+          final nextStep = Coordinate(
+            row: thisStep.row + nextStepDiff.row,
+            col: thisStep.col + nextStepDiff.col,
+          );
+          // print(
+          //     'applying   $nextStepDiff to thisStep: $thisStep to get nextStep:$nextStep - ${alreadyWalked}');
+
+          // the first step always points back at start
+          if (alreadyWalked.contains(nextStep) ||
+              nextStep == start && alreadyWalked.length == 1) {
+            //print('skipping first step point back at start');
+          } else if (nextStep == start) {
+            thisStep = nextStep;
+            done = true;
+          } else {
+            alreadyWalked.add(nextStep);
+            thisStep = nextStep;
+            done = true;
+          }
+        }
+      }
     }
+    return alreadyWalked;
   }
 
   @override
@@ -178,16 +183,15 @@ class Day10 extends GenericDay {
         start: start,
         firstStep: e,
         cellMap: cellMap,
-        alreadyWalked: [],
       );
     });
     //print('-------------------------');
     // find the max length of any of the lists of steps
-    final fullLength = route.map((e) => (e as List<Coordinate>).length).fold(
+    final fullLength = route.map((e) => e.length).fold(
         0,
         (previousValue, element) =>
             previousValue > element ? previousValue : element);
-    return ((fullLength - 1) / 2).round();
+    return ((fullLength) / 2).round();
   }
 
   @override
