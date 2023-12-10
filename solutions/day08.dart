@@ -25,20 +25,19 @@ class Day08 extends GenericDay {
 
   @override
   int solvePart1() {
-    return 0;
-    // parseInput();
-    // var currentLocation = 'AAA';
-    // const targetLocation = 'ZZZ';
-    // var index = rl.length;
-    // var locationIndex = index % rl.length;
-    // while (currentLocation != targetLocation) {
-    //   //print('1. $currentLocation $index $locationIndex ');
-    //   currentLocation = steps[currentLocation]![rl[locationIndex]]!;
-    //   index = index + 1;
-    //   locationIndex = index % rl.length;
-    //   //print('2. $currentLocation $index $locationIndex ');
-    // }
-    // return index - rl.length;
+    parseInput();
+    var currentLocation = 'AAA';
+    const targetLocation = 'ZZZ';
+    var index = rl.length;
+    var locationIndex = index % rl.length;
+    while (currentLocation != targetLocation) {
+      //print('1. $currentLocation $index $locationIndex ');
+      currentLocation = steps[currentLocation]![rl[locationIndex]]!;
+      index = index + 1;
+      locationIndex = index % rl.length;
+      //print('2. $currentLocation $index $locationIndex ');
+    }
+    return index - rl.length;
   }
 
   /// Not correct
@@ -49,7 +48,7 @@ class Day08 extends GenericDay {
     print('part 2:');
     final minimumSteps = steps.keys
         // find all the starting spots
-        .where((element) => element.endsWith('A') && !element.startsWith('A'))
+        .where((element) => element.endsWith('A'))
         .map(calcIterations)
         .toList();
     print('minimum steps $minimumSteps');
@@ -64,7 +63,7 @@ class Day08 extends GenericDay {
 
   int calcIterations(String e) {
     {
-      print('starting spot $e with pattern $rl');
+      // print('starting spot $e with pattern $rl');
       // all paths are the same so just randomly pick one
       var currentLocation = e;
       // endsWidth instead of ==
@@ -73,14 +72,14 @@ class Day08 extends GenericDay {
       var locationIndex = index % rl.length;
       //print(e);
       while (!currentLocation.endsWith(targetLocation)) {
-        print(
-            'current location $currentLocation ${steps[currentLocation]} -> ${rl[locationIndex]}');
+        // print(
+        //     'current location $currentLocation ${steps[currentLocation]} -> ${rl[locationIndex]}');
         currentLocation = steps[currentLocation]![rl[locationIndex]]!;
         index = index + 1;
         locationIndex = index % rl.length;
       }
-      print(
-          'finished location $currentLocation ${steps[currentLocation]} -> ${rl[locationIndex]}');
+      // print(
+      //     'finished location $currentLocation ${steps[currentLocation]} -> ${rl[locationIndex]}');
       return index - rl.length;
     }
   }
