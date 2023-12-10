@@ -65,7 +65,6 @@ class Day09 extends GenericDay {
         .map(
           (e) =>
               e.fold(0, (previousValue, element) => element[0] - previousValue),
-          //(e) => e.reduce((value, element) => [value.first - element.first]),
         )
         .toList();
     return answer.sum;
