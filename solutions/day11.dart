@@ -5,17 +5,33 @@ class Day11 extends GenericDay {
 
   @override
   List<List<String>> parseInput() {
-    var universe = input.getPerLine().map((e) => e.split('')).toList();
-    print(universe);
-    return universe;
+    return input.getPerLine().map((e) => e.split('')).toList();
   }
 
   @override
   int solvePart1() {
     var universe = parseInput();
-    final newUniverse = buildNewUniverse(universe);
-    final universes = findUniverses(newUniverse, universeMarker: '#');
-    return 0;
+    final expandedUniverse = buildExpandedUniverse(universe);
+    final allUniverses = findUniverses(expandedUniverse, universeMarker: '#');
+    final distances = allUniverses
+        .map(
+          (e) => allUniverses
+              .map(
+                (f) => (e != f) ? calcDistance(e, f) : Null,
+              )
+              .where((element) => element != Null),
+        )
+        .flattened
+        .toList();
+    print(
+        '${distances.length} - ${distances.map((e) => (e as Distance).distance)}');
+    return (distances.fold(
+              0,
+              (previousValue, element) =>
+                  previousValue + (element as Distance).distance,
+            ) /
+            2)
+        .round();
   }
 
   @override
@@ -37,10 +53,12 @@ class Day11 extends GenericDay {
   }
 
   // build a new universe based on empty rows and columns
-  List<List<String>> buildNewUniverse(
+  List<List<String>> buildExpandedUniverse(
     List<List<String>> universe,
   ) {
+    // content is the number of universes in this col
     final emptyCols = List.filled(universe[0].length, 0);
+    // content is the number of universes in this col
     final emptyRows = List.filled(universe.length, 0);
 
     // find empty rows and columns - count number of universes per
@@ -50,30 +68,45 @@ class Day11 extends GenericDay {
         emptyRows[row] = universe[row].map((e) => e == '#' ? 1 : 0).sum;
       }
     }
+    //print('emptyRows: $emptyRows, emptyCols: $emptyCols');
 
-    final newUniverse = <List<String>>[];
     // newUniverse is a different data structure
-    // add the rows first
+    final newUniverse = <List<String>>[];
+    // rows first
     for (var row = 0; row < universe.length; row++) {
-      // make a copy
       newUniverse.add(List.from(universe[row]));
-      //is empty?
       if (emptyRows[row] == 0) {
-        newUniverse.add(List.filled(universe[row].length, '.', growable: true));
+        newUniverse.add(List.filled(universe[row].length, '*', growable: true));
       }
     }
+    //print('Expanded universe from ${universe.length} to ${newUniverse.length}');
     // now expand the columns where the column is empty
-    for (var row = 0; row < universe.length; row++) {
-      for (var col = universe[row].length - 1; col >= 0; col--) {
+    for (var col = newUniverse[0].length - 1; col >= 0; col--) {
+      for (var row = 0; row < newUniverse.length; row++) {
         if (emptyCols[col] == 0) {
-          //print('adding col at ${col + 1} to row $row');
-          // add after this column
-          newUniverse[row].insert(col + 1, '.');
+          newUniverse[row].insert(col, '*');
         }
+        //print('$row  ${newUniverse[row]}');
       }
     }
     return newUniverse;
   }
+
+  Distance calcDistance(Location e, Location f) {
+    //print('$e - $f - ${(f.row - e.row).abs() + (f.col - e.col).abs()}');
+    return Distance(
+        start: e,
+        end: f,
+        distance: (f.row - e.row).abs() + (f.col - e.col).abs());
+  }
+}
+
+class Distance {
+  Distance({required this.start, required this.end, required this.distance});
+
+  final Location start;
+  final Location end;
+  final int distance;
 }
 
 class Location {
@@ -83,4 +116,11 @@ class Location {
   );
   final int row;
   final int col;
+
+  @override
+  String toString() {
+    return '{"row":$row, "col":$col}';
+  }
+
+  int get hashCode => "$row:$col".hashCode;
 }
