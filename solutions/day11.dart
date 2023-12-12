@@ -10,25 +10,15 @@ class Day11 extends GenericDay {
 
   @override
   int solvePart1() {
-    var universe = parseInput();
-    final expandedUniverse = buildExpandedUniverse(universe);
-    final allUniverses = findUniverses(expandedUniverse, universeMarker: '#');
-    final distances = allUniverses
-        .map(
-          (e) => allUniverses
-              .map(
-                (f) => (e != f) ? calcDistance(e, f) : Null,
-              )
-              .where((element) => element != Null),
-        )
-        .flattened
-        .toList();
-    print(
-        '${distances.length} - ${distances.map((e) => (e as Distance).distance)}');
+    final universe = parseInput();
+    final weightedUniverse = buildWeightedUniverse(universe, emptyRankValue: 2);
+    final allUniverses = findUniverses(universe, universeMarker: '#');
+    final distances = calcWeightedDistances(allUniverses, weightedUniverse);
+    // print(
+    //     'P1 ${distances.length} - ${distances.map((e) => (e as Distance).distance)}');
     return (distances.fold(
               0,
-              (previousValue, element) =>
-                  previousValue + (element as Distance).distance,
+              (previousValue, element) => previousValue + element.distance,
             ) /
             2)
         .round();
@@ -36,7 +26,33 @@ class Day11 extends GenericDay {
 
   @override
   int solvePart2() {
-    return 0;
+    final universe = parseInput();
+    final weightedUniverse =
+        buildWeightedUniverse(universe, emptyRankValue: 1000000);
+    final allUniverses = findUniverses(universe, universeMarker: '#');
+    final distances = calcWeightedDistances(allUniverses, weightedUniverse);
+    // print(
+    // 'P2 ${distances.length} - ${distances.map((e) => (e as Distance).distance)}');
+    return (distances.fold(
+              0,
+              (previousValue, element) => previousValue + element.distance,
+            ) /
+            2)
+        .round();
+  }
+
+  List<Distance> calcWeightedDistances(
+    List<Location> allUniverses,
+    List<List<int>> weigthedUniverse,
+  ) {
+    final distances = allUniverses
+        .map((e) => allUniverses
+            .map((f) => (e != f) ? calcDistance(e, f, weigthedUniverse) : null)
+            .nonNulls)
+        .flattened
+        .toList();
+
+    return distances;
   }
 
   List<Location> findUniverses(List<List<String>> aUniverse,
@@ -52,10 +68,9 @@ class Day11 extends GenericDay {
     return theUnverses;
   }
 
-  // build a new universe based on empty rows and columns
-  List<List<String>> buildExpandedUniverse(
-    List<List<String>> universe,
-  ) {
+  // build a new universe weighted on empty rows and columns
+  List<List<int>> buildWeightedUniverse(List<List<String>> universe,
+      {int emptyRankValue = 1}) {
     // content is the number of universes in this col
     final emptyCols = List.filled(universe[0].length, 0);
     // content is the number of universes in this col
@@ -70,34 +85,55 @@ class Day11 extends GenericDay {
     }
     //print('emptyRows: $emptyRows, emptyCols: $emptyCols');
 
-    // newUniverse is a different data structure
-    final newUniverse = <List<String>>[];
+    final newUniverse = <List<int>>[];
     // rows first
     for (var row = 0; row < universe.length; row++) {
-      newUniverse.add(List.from(universe[row]));
       if (emptyRows[row] == 0) {
-        newUniverse.add(List.filled(universe[row].length, '*', growable: true));
+        newUniverse.add(
+          List.filled(universe[row].length, emptyRankValue, growable: true),
+        );
+      } else {
+        newUniverse.add(
+          List.filled(universe[row].length, 1, growable: true),
+        );
       }
     }
-    //print('Expanded universe from ${universe.length} to ${newUniverse.length}');
     // now expand the columns where the column is empty
     for (var col = newUniverse[0].length - 1; col >= 0; col--) {
       for (var row = 0; row < newUniverse.length; row++) {
         if (emptyCols[col] == 0) {
-          newUniverse[row].insert(col, '*');
+          newUniverse[row][col] = emptyRankValue;
         }
         //print('$row  ${newUniverse[row]}');
       }
     }
+    //print('weighted universe $newUniverse');
     return newUniverse;
   }
 
-  Distance calcDistance(Location e, Location f) {
-    //print('$e - $f - ${(f.row - e.row).abs() + (f.col - e.col).abs()}');
-    return Distance(
-        start: e,
-        end: f,
-        distance: (f.row - e.row).abs() + (f.col - e.col).abs());
+  /// calculates the distance using the distance values in each
+  /// cell of the weightedUniverse
+  Distance calcDistance(
+    Location e,
+    Location f,
+    List<List<int>> weightedUniverse,
+  ) {
+    final minRow = (e.row < f.row) ? e.row : f.row;
+    final maxRow = (e.row > f.row) ? e.row : f.row;
+    final weightRow = Iterable.generate(
+      maxRow - minRow,
+      (e) => weightedUniverse[e + minRow][0],
+    ).sum;
+    final minCol = (e.col < f.col) ? e.col : f.col;
+    final maxCol = (e.col > f.col) ? e.col : f.col;
+    final weightCol = Iterable.generate(
+      maxCol - minCol,
+      (e) => weightedUniverse[0][e + minCol],
+    ).sum;
+
+    // print(
+    //     'Distance start: $e, end: $f, weight: $weightRow $weightCol distance: ${weightRow + weightCol}');
+    return Distance(start: e, end: f, distance: weightRow + weightCol);
   }
 }
 
@@ -122,5 +158,6 @@ class Location {
     return '{"row":$row, "col":$col}';
   }
 
+  @override
   int get hashCode => "$row:$col".hashCode;
 }
