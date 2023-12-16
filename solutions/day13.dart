@@ -1,40 +1,111 @@
+import '../utils/coordinate.dart';
 import '../utils/index.dart';
+
+// NOT COMPLETE  WAS NOT FINISHED
 
 class Day13 extends GenericDay {
   Day13() : super(13);
 
+  /// list of paragraphs where each paragraph is a Coordiante and value
   @override
-  parseInput() {
-    final lines = input.getPerLine();
-    final blankLines = lines
-        .mapIndexed((index, element) => element.isEmpty ? index : null)
-        .toList()
-        .nonNulls;
-    var group = 0;
-    // Map of lists of rows keyed by group number
-    var blocks = lines
-        .map((e) {
-          if (e.isEmpty) {
-            group = group + 1;
-            return null;
-          } else {
-            return {group: e};
-          }
-        })
-        .nonNulls
-        .groupListsBy((element) => element.keys.firstOrNull);
+  List<Map<Coordinate, String>> parseInput() {
+    var allPargraphs = input.getParagraphLines();
 
-    return;
+    // list of documents - each document is a map of values at coordinates
+    // List<Map<Coordinate, String>>
+    final paragraphsAsMaps = allPargraphs
+        .map((oneParagraph) => oneParagraph
+            .mapIndexed(
+              (rowIndex, oneRow) => oneRow.split('').mapIndexed(
+                  (colIndex, oneChar) =>
+                      {Coordinate(row: rowIndex, col: colIndex): oneChar}),
+            )
+            .flattened
+            .fold(<Coordinate, String>{},
+                (previousValue, element) => mergeMaps(previousValue, element)))
+        .toList();
+    return paragraphsAsMaps;
   }
 
   @override
   int solvePart1() {
-    parseInput();
-    return 0;
+    // first pargrah reflects across vertical
+    // second paragraph reflects acros horizontal
+    final allParagraphs = parseInput();
+    final paragraphScores = allParagraphs.map((e) {
+      var colHashes = calcHashesCol(e);
+      var rowHashes = calcHashesRow(e);
+
+      print(' vHash: $colHashes');
+      print(' hHash: $rowHashes');
+
+      return calcHorizReflectionLine(colHashes) * 100 +
+          calcVertReflectionLine(rowHashes);
+    }).toList();
+    print('$paragraphScores');
+    return paragraphScores.sum;
   }
 
   @override
   int solvePart2() {
     return 0;
+  }
+
+  // TODO: add recursion
+  int calcHorizReflectionLine(List<int> colHashes) {
+    for (int row = 0; row < colHashes.length; row++) {
+      if (colHashes[row] == colHashes[row + 1]) return row;
+    }
+    return 0;
+  }
+
+  // TODO: add recursion
+  int calcVertReflectionLine(List<int> rowHashes) {
+    for (int col = 0; col < rowHashes.length; col++) {
+      if (rowHashes[col] == rowHashes[col + 1]) return col;
+    }
+    return 0;
+  }
+
+  // a List of hashes, one for each column
+  List<int> calcHashesCol(Map<Coordinate, String> allParagraph) {
+    var colHashes = <int>[];
+    int col = 0;
+    // lazy bounds checking
+    while (allParagraph.containsKey(Coordinate(row: 0, col: col))) {
+      var row = 0;
+      final colContents = <String>[];
+      var aKey = Coordinate(row: row, col: col);
+      while (allParagraph.containsKey(aKey)) {
+        colContents.add(allParagraph[aKey] as String);
+        row += 1;
+        aKey = Coordinate(row: row, col: col);
+      }
+      print('colContents: $colContents');
+      colHashes.add(colContents.toString().hashCode);
+      col += 1;
+    }
+    return colHashes;
+  }
+
+// a list of hashes, one for each row
+  List<int> calcHashesRow(Map<Coordinate, String> allParagraph) {
+    var rowHashes = <int>[];
+    int row = 0;
+    // lazy bounds checking
+    while (allParagraph.containsKey(Coordinate(row: row, col: 0))) {
+      var col = 0;
+      final rowContents = <String>[];
+      var aKey = Coordinate(row: row, col: col);
+      while (allParagraph.containsKey(aKey)) {
+        rowContents.add(allParagraph[aKey] as String);
+        col += 1;
+        aKey = Coordinate(row: row, col: col);
+      }
+      print('rowContents: $rowContents');
+      rowHashes.add(rowContents.toString().hashCode);
+      row += 1;
+    }
+    return rowHashes;
   }
 }

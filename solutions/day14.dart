@@ -1,5 +1,5 @@
+import '../utils/coordinate.dart';
 import '../utils/index.dart';
-import 'index.dart';
 
 class Day14 extends GenericDay {
   Day14() : super(14);

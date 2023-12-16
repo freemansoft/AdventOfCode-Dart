@@ -45,4 +45,22 @@ class InputUtil {
   List<String> getBy(String pattern) {
     return _inputAsString.split(pattern);
   }
+
+  List<List<String>> getParagraphLines() {
+    final lines = getPerLine();
+    var allParagraphs = <List<String>>[];
+    var paragraph = <String>[];
+    for (var oneLine in lines) {
+      if (oneLine.isNotEmpty) {
+        paragraph.add(oneLine);
+      } else {
+        allParagraphs.add(paragraph);
+        paragraph = <String>[];
+      }
+    }
+    if (!paragraph.isEmpty) {
+      allParagraphs.add(paragraph);
+    }
+    return allParagraphs;
+  }
 }
