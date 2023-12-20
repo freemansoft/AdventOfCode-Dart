@@ -5,6 +5,17 @@ import 'package:meta/meta.dart';
 import '../utils/coordinate.dart';
 import '../utils/index.dart';
 
+// problem-1 executed a single cyle
+// problem-2 executed 440 cycles : 2x110+2x110
+
+// using Lists to hold the openTasks and completedTasks
+// Solution for puzzle one: 6816 - Took 45,515 microseconds
+// Solution for puzzle two: 8163 - Took 4,762,137 microseconds
+//
+// using Sets to hold the openTasks and the completed Tasks
+// Solution for puzzle one: 6816 - Took 347,303 microseconds
+// Solution for puzzle two: 8163 - Took 74,975,547 microseconds
+
 /// A definition of the relative exit paths for all of the possible entry paths.
 @immutable
 class TransitionDef {
@@ -282,40 +293,37 @@ class Day16 extends GenericDay {
       ),
     );
 
-    print(foo);
+    //print(foo);
 
     return foo.reduce((value, element) => (value < element) ? element : value);
   }
 
-  // first to last
+  // converted from recursive to iterative
   void executeTasks({
-    required List<Transition> openTasks,
-    required List<Transition> completedTasks,
+    required Set<Transition> openTasks,
+    required Set<Transition> completedTasks,
     required Field<SquarefTransitionDefs> onField,
   }) {
     while (openTasks.isNotEmpty) {
       final currentTask = openTasks.last;
-      openTasks.removeLast();
-      // from is relative and to is absolute
-      //print('executeTasks - currentTask: $currentTask');
+      openTasks.remove(currentTask);
+      // the cell we are moving into
       final cellDefTargetCell =
           onField.getValueAt(x: currentTask.to.col, y: currentTask.to.row);
-      // print('executeTasks - row: ${currentTask.to.row} col: ${currentTask.to.col}'
-      //     ' cellDef: $cellDefTargetCell');
-
+      // Find the entry angle that matches the task
       // Look for the cellTarget def that aligns with this entry
       for (final oneDef in cellDefTargetCell.allDefs) {
-        // only one really maps to this operation
+        // only one really maps to this operation - entry angle - skip the rest
         if (oneDef.from == currentTask.from) {
-          // mark this completed before it is so the recursion doesn't repeat it
+          // moved this early because it was recursive
           completedTasks.add(currentTask);
-          // add all the possible exit paths
-          //print('------------> ${oneDef.to.length}');
+          // add all the possible exit paths from the field map
           for (final oneExit in oneDef.to) {
             final target = Coordinate(
               row: currentTask.to.row + oneExit.row,
               col: currentTask.to.col + oneExit.col,
             );
+            // create a transition so we can do a contains
             final nextTransition = Transition(
               from: oneExit.invert,
               to: target,
@@ -346,9 +354,9 @@ class Day16 extends GenericDay {
     Field<SquarefTransitionDefs> playingField,
   ) {
     // scheduled movements that have not yet all been consumed
-    final openTasks = <Transition>[];
+    final openTasks = <Transition>{};
     // consumed used to do branch pruning and exit
-    final completedTasks = <Transition>[];
+    final completedTasks = <Transition>{};
     // ignore: cascade_invocations
     openTasks.add(transition);
     executeTasks(
@@ -359,9 +367,9 @@ class Day16 extends GenericDay {
 
     final litSquares = completedTasks.map((e) => e.to).toSet();
 
-    print('solve1 - open ${openTasks.length} '
-        '- completed ${completedTasks.length} '
-        '- lit ${litSquares.length}');
+    // print('solve1 - open ${openTasks.length} '
+    //     '- completed ${completedTasks.length} '
+    //     '- lit ${litSquares.length}');
 
     return litSquares.length;
   }
