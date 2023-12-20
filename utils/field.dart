@@ -28,7 +28,7 @@ class Field<T> {
   }
 
   /// Returns the value at the given coordinates.
-  T getValueAt(int x, int y) => getValueAtPosition((x, y));
+  T getValueAt({required int x, required int y}) => getValueAtPosition((x, y));
 
   /// Sets the value at the given Position.
   void setValueAtPosition(Position position, T value) {
@@ -37,7 +37,8 @@ class Field<T> {
   }
 
   /// Sets the value at the given coordinates.
-  void setValueAt(int x, int y, T value) => setValueAtPosition((x, y), value);
+  void setValueAt({required int x, required int y, required T value}) =>
+      setValueAtPosition((x, y), value);
 
   /// Returns whether the given position is inside of this field.
   bool isOnField(Position position) {
@@ -143,7 +144,8 @@ class Field<T> {
 /// Extension for [Field]s where `T` is of type [int].
 extension IntegerField on Field<int> {
   /// Increments the values of Position `x` `y`.
-  dynamic increment(int x, int y) => setValueAt(x, y, getValueAt(x, y) + 1);
+  dynamic increment(int x, int y) =>
+      setValueAt(x: x, y: y, value: getValueAt(x: x, y: y) + 1);
 
   /// Convenience method to create a Field from a single String, where the
   /// String is a "block" of integers.
