@@ -8,13 +8,21 @@ import '../utils/index.dart';
 // problem-1 executed a single cyle
 // problem-2 executed 440 cycles : 2x110+2x110
 
-// using Lists to hold the openTasks and completedTasks
+// using Lists to hold the openTasks and the completed Tasks
+// Solution for puzzle one: 6816 - Took 347,303 microseconds
+// Solution for puzzle two: 8163 - Took 74,975,547 microseconds
+//
+// using Sets to hold the openTasks and completedTasks
 // Solution for puzzle one: 6816 - Took 45,515 microseconds
 // Solution for puzzle two: 8163 - Took 4,762,137 microseconds
 //
-// using Sets to hold the openTasks and the completed Tasks
-// Solution for puzzle one: 6816 - Took 347,303 microseconds
-// Solution for puzzle two: 8163 - Took 74,975,547 microseconds
+// aot compile
+// $ dart compile aot-snapshot .\main.dart -o bin/runme
+// $ dartaotruntime .\bin\runme
+// exe compile same results
+// $ dart compile exe .\main.dart -o bin/myapp.exe
+// Solution for puzzle one: 6816 - Took 25,995 microseconds
+// Solution for puzzle two: 8163 - Took 5,429,432 microseconds
 
 /// A definition of the relative exit paths for all of the possible entry paths.
 @immutable
