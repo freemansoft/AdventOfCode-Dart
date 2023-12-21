@@ -49,7 +49,8 @@ class Day11 extends GenericDay {
         .map(
           (e) => allUniverses
               .map(
-                  (f) => (e != f) ? calcDistance(e, f, weigthedUniverse) : null)
+                (f) => (e != f) ? calcDistance(e, f, weigthedUniverse) : null,
+              )
               .nonNulls,
         )
         .flattened
