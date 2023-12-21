@@ -32,7 +32,7 @@ class Day06 extends GenericDay {
   int solvePart1() {
     // convert the row columns into list elements
     final linesAsLists =
-        input.getPerLine().map((e) => e.split(RegExp(r"\s+"))).toList();
+        input.getPerLine().map((e) => e.split(RegExp(r'\s+'))).toList();
     //print(linesAsLists);
     // print(
     //   IterableZip([linesAsLists[0].sublist(1), linesAsLists[1].sublist(1)]));
@@ -62,7 +62,9 @@ class Day06 extends GenericDay {
         .toList();
     // use the same code we used in item 1 to calculate
     final allRuns = getNumAboveSpeed(
-        int.parse(linesAsLists[0][1]), int.parse(linesAsLists[1][1]));
+      int.parse(linesAsLists[0][1]),
+      int.parse(linesAsLists[1][1]),
+    );
 
     return allRuns;
   }

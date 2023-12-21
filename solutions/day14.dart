@@ -18,14 +18,15 @@ class Day14 extends GenericDay {
     board = lines
         .mapIndexed(
           (row, element) => element.split('').mapIndexed(
-              (col, element) => {Coordinate(row: row, col: col): element}),
+                (col, element) => {Coordinate(row: row, col: col): element},
+              ),
         )
         // each Iterator contains 1 Hasmap with one entry {coordinate:character}
         // put all the resulting maps into one Map by coordinate
         .flattened
         .fold(
       {},
-      (previousValue, element) => mergeMaps(previousValue, element),
+      mergeMaps,
     )..removeWhere((key, value) => value == '.');
   }
 
@@ -115,7 +116,7 @@ class Day14 extends GenericDay {
   int solvePart2() {
     parseInput();
     var finalBoard = tiltNorth(board);
-    var cache = <int, int>{};
+    final cache = <int, int>{};
 
     // tilting the board in the same direction leaves it the same
     for (var i = 0; i < 1000000000; i++) {

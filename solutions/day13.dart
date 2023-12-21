@@ -9,20 +9,25 @@ class Day13 extends GenericDay {
   /// list of paragraphs where each paragraph is a Coordiante and value
   @override
   List<Map<Coordinate, String>> parseInput() {
-    var allPargraphs = input.getParagraphLines();
+    final allPargraphs = input.getParagraphLines();
 
     // list of documents - each document is a map of values at coordinates
     // List<Map<Coordinate, String>>
     final paragraphsAsMaps = allPargraphs
-        .map((oneParagraph) => oneParagraph
-            .mapIndexed(
-              (rowIndex, oneRow) => oneRow.split('').mapIndexed(
-                  (colIndex, oneChar) =>
-                      {Coordinate(row: rowIndex, col: colIndex): oneChar}),
-            )
-            .flattened
-            .fold(<Coordinate, String>{},
-                (previousValue, element) => mergeMaps(previousValue, element)))
+        .map(
+          (oneParagraph) => oneParagraph
+              .mapIndexed(
+                (rowIndex, oneRow) => oneRow.split('').mapIndexed(
+                      (colIndex, oneChar) =>
+                          {Coordinate(row: rowIndex, col: colIndex): oneChar},
+                    ),
+              )
+              .flattened
+              .fold(
+            <Coordinate, String>{},
+            mergeMaps,
+          ),
+        )
         .toList();
     return paragraphsAsMaps;
   }
@@ -33,8 +38,8 @@ class Day13 extends GenericDay {
     // second paragraph reflects acros horizontal
     final allParagraphs = parseInput();
     final paragraphScores = allParagraphs.map((e) {
-      var colHashes = calcHashesCol(e);
-      var rowHashes = calcHashesRow(e);
+      final colHashes = calcHashesCol(e);
+      final rowHashes = calcHashesRow(e);
 
       print(' vHash: $colHashes');
       print(' hHash: $rowHashes');
@@ -53,7 +58,7 @@ class Day13 extends GenericDay {
 
   // TODO: add recursion
   int calcHorizReflectionLine(List<int> colHashes) {
-    for (int row = 0; row < colHashes.length; row++) {
+    for (var row = 0; row < colHashes.length; row++) {
       if (colHashes[row] == colHashes[row + 1]) return row;
     }
     return 0;
@@ -61,7 +66,7 @@ class Day13 extends GenericDay {
 
   // TODO: add recursion
   int calcVertReflectionLine(List<int> rowHashes) {
-    for (int col = 0; col < rowHashes.length; col++) {
+    for (var col = 0; col < rowHashes.length; col++) {
       if (rowHashes[col] == rowHashes[col + 1]) return col;
     }
     return 0;
@@ -69,15 +74,15 @@ class Day13 extends GenericDay {
 
   // a List of hashes, one for each column
   List<int> calcHashesCol(Map<Coordinate, String> allParagraph) {
-    var colHashes = <int>[];
-    int col = 0;
+    final colHashes = <int>[];
+    var col = 0;
     // lazy bounds checking
     while (allParagraph.containsKey(Coordinate(row: 0, col: col))) {
       var row = 0;
       final colContents = <String>[];
       var aKey = Coordinate(row: row, col: col);
       while (allParagraph.containsKey(aKey)) {
-        colContents.add(allParagraph[aKey] as String);
+        colContents.add(allParagraph[aKey]!);
         row += 1;
         aKey = Coordinate(row: row, col: col);
       }
@@ -90,15 +95,15 @@ class Day13 extends GenericDay {
 
 // a list of hashes, one for each row
   List<int> calcHashesRow(Map<Coordinate, String> allParagraph) {
-    var rowHashes = <int>[];
-    int row = 0;
+    final rowHashes = <int>[];
+    var row = 0;
     // lazy bounds checking
     while (allParagraph.containsKey(Coordinate(row: row, col: 0))) {
       var col = 0;
       final rowContents = <String>[];
       var aKey = Coordinate(row: row, col: col);
       while (allParagraph.containsKey(aKey)) {
-        rowContents.add(allParagraph[aKey] as String);
+        rowContents.add(allParagraph[aKey]!);
         col += 1;
         aKey = Coordinate(row: row, col: col);
       }

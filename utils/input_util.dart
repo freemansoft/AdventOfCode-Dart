@@ -48,9 +48,9 @@ class InputUtil {
 
   List<List<String>> getParagraphLines() {
     final lines = getPerLine();
-    var allParagraphs = <List<String>>[];
+    final allParagraphs = <List<String>>[];
     var paragraph = <String>[];
-    for (var oneLine in lines) {
+    for (final oneLine in lines) {
       if (oneLine.isNotEmpty) {
         paragraph.add(oneLine);
       } else {
@@ -58,7 +58,7 @@ class InputUtil {
         paragraph = <String>[];
       }
     }
-    if (!paragraph.isEmpty) {
+    if (paragraph.isNotEmpty) {
       allParagraphs.add(paragraph);
     }
     return allParagraphs;

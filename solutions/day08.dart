@@ -11,16 +11,18 @@ class Day08 extends GenericDay {
 
   @override
   parseInput() {
-    var foo = input.getPerLine();
+    final foo = input.getPerLine();
     rl = foo[0].split('');
-    steps = Map.fromEntries(foo.sublist(2).map((e) {
-      final stuff = e
-          .replaceAll(' = (', ' ')
-          .replaceAll(', ', ' ')
-          .replaceAll(')', '')
-          .split(' ');
-      return MapEntry(stuff[0], {'L': stuff[1], 'R': stuff[2]});
-    }).toList());
+    steps = Map.fromEntries(
+      foo.sublist(2).map((e) {
+        final stuff = e
+            .replaceAll(' = (', ' ')
+            .replaceAll(', ', ' ')
+            .replaceAll(')', '')
+            .split(' ');
+        return MapEntry(stuff[0], {'L': stuff[1], 'R': stuff[2]});
+      }).toList(),
+    );
   }
 
   @override
@@ -52,7 +54,7 @@ class Day08 extends GenericDay {
         .map(calcIterations)
         .toList();
     print('minimum steps $minimumSteps');
-    final answer = minimumSteps.reduce((value, element) => lcm(value, element));
+    final answer = minimumSteps.reduce(lcm);
     final multiplesPerStep = minimumSteps.map((e) => answer / e).toList();
     print('least common multiple $answer');
     print('divisor per step $multiplesPerStep');

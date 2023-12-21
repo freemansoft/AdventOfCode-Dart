@@ -7,15 +7,15 @@ class Day15 extends GenericDay {
 
   @override
   List<String> parseInput() {
-    var phrases = input.getPerLine().join().split(',').nonNulls.toList();
+    final phrases = input.getPerLine().join().split(',').nonNulls.toList();
     return phrases;
   }
 
   @override
   int solvePart1() {
-    var phrases = parseInput();
+    final phrases = parseInput();
     print(phrases);
-    var hashes = phrases.map((e) => calcHash(e));
+    final hashes = phrases.map(calcHash);
     print(hashes);
     return hashes.sum;
   }
@@ -28,6 +28,8 @@ class Day15 extends GenericDay {
   int calcHash(String phrase) {
     // list of ascii values
     return ascii.encode(phrase).fold(
-        0, (previousValue, element) => ((previousValue + element) * 17) % 256);
+          0,
+          (previousValue, element) => ((previousValue + element) * 17) % 256,
+        );
   }
 }

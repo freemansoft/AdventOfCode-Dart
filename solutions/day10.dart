@@ -10,47 +10,47 @@ class Day10 extends GenericDay {
   Map<String, Set<Coordinate>> symbols = {
     // is a vertical pipe connecting north and south.
     '|': {
-      Coordinate(row: -1, col: 0),
-      Coordinate(row: 1, col: 0),
+      const Coordinate(row: -1, col: 0),
+      const Coordinate(row: 1, col: 0),
     },
     // is a horizontal pipe connecting east and west
     '-': {
-      Coordinate(row: 0, col: -1),
-      Coordinate(row: 0, col: 1),
+      const Coordinate(row: 0, col: -1),
+      const Coordinate(row: 0, col: 1),
     },
     //is a 90-degree bend connecting north and east.
     'L': {
-      Coordinate(row: -1, col: 0),
-      Coordinate(row: 0, col: 1),
+      const Coordinate(row: -1, col: 0),
+      const Coordinate(row: 0, col: 1),
     },
     //is a 90-degree bend connecting north and west.
     'J': {
-      Coordinate(row: -1, col: 0),
-      Coordinate(row: 0, col: -1),
+      const Coordinate(row: -1, col: 0),
+      const Coordinate(row: 0, col: -1),
     },
     //is a 90-degree bend connecting south and west.
-    '7': {Coordinate(row: 0, col: -1), Coordinate(row: 1, col: 0)},
+    '7': {const Coordinate(row: 0, col: -1), const Coordinate(row: 1, col: 0)},
     // is a 90-degree bend connecting south and east.
-    'F': {Coordinate(row: 0, col: 1), Coordinate(row: 1, col: 0)},
+    'F': {const Coordinate(row: 0, col: 1), const Coordinate(row: 1, col: 0)},
     // is ground; there is no pipe in this tile.
     '.': {},
     // is the starting position of the animal; there is a pipe on this tile,
     // but your sketch does not show what shape the pipe has.
     'S': {
-      Coordinate(row: -1, col: 0),
-      Coordinate(row: 0, col: -1),
-      Coordinate(row: 0, col: 1),
-      Coordinate(row: 1, col: 0),
+      const Coordinate(row: -1, col: 0),
+      const Coordinate(row: 0, col: -1),
+      const Coordinate(row: 0, col: 1),
+      const Coordinate(row: 1, col: 0),
     },
   };
 
   /// really the directions we can search in
   /// the second set is what it has to have to see back to us
   final Set<List<Coordinate>> validDirections = {
-    [Coordinate(row: -1, col: 0), Coordinate(row: 1, col: 0)],
-    [Coordinate(row: 0, col: -1), Coordinate(row: 0, col: 1)],
-    [Coordinate(row: 0, col: 1), Coordinate(row: 0, col: -1)],
-    [Coordinate(row: 1, col: 0), Coordinate(row: -1, col: 0)],
+    [const Coordinate(row: -1, col: 0), const Coordinate(row: 1, col: 0)],
+    [const Coordinate(row: 0, col: -1), const Coordinate(row: 0, col: 1)],
+    [const Coordinate(row: 0, col: 1), const Coordinate(row: 0, col: -1)],
+    [const Coordinate(row: 1, col: 0), const Coordinate(row: -1, col: 0)],
   };
 
   Coordinate findStartLocation() {
@@ -169,10 +169,11 @@ class Day10 extends GenericDay {
     //print('-------------------------');
     // find the max length of any of the lists of steps
     final fullLength = route.map((e) => e.length).fold(
-        0,
-        (previousValue, element) =>
-            previousValue > element ? previousValue : element);
-    return ((fullLength) / 2).round();
+          0,
+          (previousValue, element) =>
+              previousValue > element ? previousValue : element,
+        );
+    return (fullLength / 2).round();
   }
 
   @override

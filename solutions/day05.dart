@@ -11,8 +11,10 @@ class Day05 extends GenericDay {
       _accumulator[0][0].split('-')[2],
       _accumulator
           .sublist(1)
-          .map((e) =>
-              TheMapEntry(int.parse(e[0]), int.parse(e[1]), int.parse(e[2])))
+          .map(
+            (e) =>
+                TheMapEntry(int.parse(e[0]), int.parse(e[1]), int.parse(e[2])),
+          )
           .toList(),
     );
     _accumulator = [];
@@ -94,9 +96,10 @@ class Day05 extends GenericDay {
     print('part 1 - allSeeds: ${allSeeds.toList()}');
 
     return allSeeds.fold(
-        maxIntValue,
-        (previousValue, element) =>
-            previousValue < element ? previousValue : element);
+      maxIntValue,
+      (previousValue, element) =>
+          previousValue < element ? previousValue : element,
+    );
   }
 
   @override
@@ -125,9 +128,10 @@ class Day05 extends GenericDay {
     // run the drill down resolution on each item in all of the iterators
     // would be a great place for scater/gather
     return CombinedIterableView(ourIterators).map(locationForSeed).fold(
-        maxIntValue,
-        (previousValue, element) =>
-            previousValue < element ? previousValue : element);
+          maxIntValue,
+          (previousValue, element) =>
+              previousValue < element ? previousValue : element,
+        );
   }
 }
 

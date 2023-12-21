@@ -88,8 +88,10 @@ class Day07 extends GenericDay {
     '7:5J': 7, // 5 of a kind  - 5 of a kind
   };
 
-  int handTypeForMappedCards(Map<int, int> mappedCards,
-      {bool jokersWild = false}) {
+  int handTypeForMappedCards(
+    Map<int, int> mappedCards, {
+    bool jokersWild = false,
+  }) {
     if (mappedCards.containsValue(5)) {
       // 5 of a kind
       return 7;
@@ -179,16 +181,17 @@ class Day07 extends GenericDay {
         return map;
       });
       return Hand(
-          sortedCards: sortedCards,
-          unsortedCards: unsortedCards,
-          mappedCards: mappedCards,
-          handType: handTypeForMappedCards(mappedCards, jokersWild: jokersWild),
-          bid: int.parse(theCardsAndBid[1]),
-          handWeight: unsortedCards[0] * 100000000 +
-              unsortedCards[1] * 1000000 +
-              unsortedCards[2] * 10000 +
-              unsortedCards[3] * 100 +
-              unsortedCards[4]);
+        sortedCards: sortedCards,
+        unsortedCards: unsortedCards,
+        mappedCards: mappedCards,
+        handType: handTypeForMappedCards(mappedCards, jokersWild: jokersWild),
+        bid: int.parse(theCardsAndBid[1]),
+        handWeight: unsortedCards[0] * 100000000 +
+            unsortedCards[1] * 1000000 +
+            unsortedCards[2] * 10000 +
+            unsortedCards[3] * 100 +
+            unsortedCards[4],
+      );
     });
     return hands;
   }
@@ -212,7 +215,8 @@ class Day07 extends GenericDay {
         .map(
           (entry) => entry.value.map((e) {
             print(
-                '$rank - ${e.handType} - ${e.handWeight} - ${e.bid} - ${e.bid * rank} - ${e.sortedCards}');
+              '$rank - ${e.handType} - ${e.handWeight} - ${e.bid} - ${e.bid * rank} - ${e.sortedCards}',
+            );
             final value = e.bid * rank;
             rank = rank - 1;
             return value;

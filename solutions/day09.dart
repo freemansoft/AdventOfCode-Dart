@@ -25,7 +25,7 @@ class Day09 extends GenericDay {
 
   @override
   int solvePart1() {
-    final Iterable<List<List<int>>> lines = parseInput();
+    final lines = parseInput();
     // for each sample
     // calculate the diffs for the last row
     final diffs = lines
@@ -48,7 +48,7 @@ class Day09 extends GenericDay {
 
   @override
   int solvePart2() {
-    final Iterable<List<List<int>>> lines = parseInput();
+    final lines = parseInput();
     // for each sample
     // calculate the diffs for the last row
     final diffs = lines

@@ -217,7 +217,7 @@ class Day16 extends GenericDay {
   int solvePart1() {
     final playingField = parseInput();
 
-    var litCount = solveOne(
+    final litCount = solveOne(
       const Transition(
         from: OffsetCoord(row: 0, col: -1),
         to: Coordinate(row: 0, col: 0),
@@ -231,7 +231,7 @@ class Day16 extends GenericDay {
   int solvePart2() {
     final playingField = parseInput();
 
-    var foo = <int>[];
+    final foo = <int>[];
 
     // ignore: cascade_invocations
     foo.addAll(

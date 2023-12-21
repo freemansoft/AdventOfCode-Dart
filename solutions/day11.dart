@@ -12,7 +12,7 @@ class Day11 extends GenericDay {
   int solvePart1() {
     final universe = parseInput();
     final weightedUniverse = buildWeightedUniverse(universe, emptyRankValue: 2);
-    final allUniverses = findUniverses(universe, universeMarker: '#');
+    final allUniverses = findUniverses(universe);
     final distances = calcWeightedDistances(allUniverses, weightedUniverse);
     // print(
     //     'P1 ${distances.length} - ${distances.map((e) => (e as Distance).distance)}');
@@ -29,7 +29,7 @@ class Day11 extends GenericDay {
     final universe = parseInput();
     final weightedUniverse =
         buildWeightedUniverse(universe, emptyRankValue: 1000000);
-    final allUniverses = findUniverses(universe, universeMarker: '#');
+    final allUniverses = findUniverses(universe);
     final distances = calcWeightedDistances(allUniverses, weightedUniverse);
     // print(
     // 'P2 ${distances.length} - ${distances.map((e) => (e as Distance).distance)}');
@@ -46,17 +46,22 @@ class Day11 extends GenericDay {
     List<List<int>> weigthedUniverse,
   ) {
     final distances = allUniverses
-        .map((e) => allUniverses
-            .map((f) => (e != f) ? calcDistance(e, f, weigthedUniverse) : null)
-            .nonNulls)
+        .map(
+          (e) => allUniverses
+              .map(
+                  (f) => (e != f) ? calcDistance(e, f, weigthedUniverse) : null)
+              .nonNulls,
+        )
         .flattened
         .toList();
 
     return distances;
   }
 
-  List<Location> findUniverses(List<List<String>> aUniverse,
-      {String universeMarker = '#'}) {
+  List<Location> findUniverses(
+    List<List<String>> aUniverse, {
+    String universeMarker = '#',
+  }) {
     final theUnverses = <Location>[];
     for (var row = 0; row < aUniverse.length; row++) {
       for (var col = 0; col < aUniverse[row].length; col++) {
@@ -69,8 +74,10 @@ class Day11 extends GenericDay {
   }
 
   // build a new universe weighted on empty rows and columns
-  List<List<int>> buildWeightedUniverse(List<List<String>> universe,
-      {int emptyRankValue = 1}) {
+  List<List<int>> buildWeightedUniverse(
+    List<List<String>> universe, {
+    int emptyRankValue = 1,
+  }) {
     // content is the number of universes in this col
     final emptyCols = List.filled(universe[0].length, 0);
     // content is the number of universes in this col
@@ -159,5 +166,5 @@ class Location {
   }
 
   @override
-  int get hashCode => "$row:$col".hashCode;
+  int get hashCode => '$row:$col'.hashCode;
 }
