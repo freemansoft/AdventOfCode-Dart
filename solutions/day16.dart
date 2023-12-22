@@ -1,7 +1,5 @@
 import 'dart:core';
 
-import 'package:meta/meta.dart';
-
 import '../utils/coordinate.dart';
 import '../utils/index.dart';
 
