@@ -24,68 +24,27 @@ import '../utils/index.dart';
 // Solution for puzzle one: 6816 - Took 25,995 microseconds
 // Solution for puzzle two: 8163 - Took 5,429,432 microseconds
 
-/// A definition of the relative exit paths for all of the possible entry paths.
-@immutable
-class TransitionDef {
-  const TransitionDef({
-    required this.type,
-    required this.from,
-    required this.to,
-  });
-  // used for tracking and logging
-  final TransitionType type;
-  // the relative location of the entry into the square
-  final OffsetCoord from;
-  // the relative exit directions - a given entry can have multiple exiting
-  final List<OffsetCoord> to;
-
-  @override
-  String toString() {
-    return '{"from": $from , "to": $to}';
-  }
-}
-
-class SquarefTransitionDefs {
-  const SquarefTransitionDefs({required this.symbol, required this.allDefs});
-  final String symbol;
-  final List<TransitionDef> allDefs;
-
-  @override
-  String toString() {
-    return '"$symbol" $allDefs';
-  }
-}
-
-/// Primarily for debugging
-enum TransitionType {
-  transparent,
-  bendWNandES,
-  bendWSandEN,
-  passWEsplitNS,
-  passNSsplitWE,
-}
-
 Map<String, SquarefTransitionDefs> charTransitionMap = {
   '/': const SquarefTransitionDefs(
     symbol: '/',
     allDefs: [
       TransitionDef(
-        type: TransitionType.bendWNandES,
+        type: '/',
         from: OffsetCoord(row: 0, col: -1),
         to: [OffsetCoord(row: -1, col: 0)],
       ),
       TransitionDef(
-        type: TransitionType.bendWNandES,
+        type: '/',
         from: OffsetCoord(row: 0, col: 1),
         to: [OffsetCoord(row: 1, col: 0)],
       ),
       TransitionDef(
-        type: TransitionType.bendWNandES,
+        type: '/',
         from: OffsetCoord(row: -1, col: 0),
         to: [OffsetCoord(row: 0, col: -1)],
       ),
       TransitionDef(
-        type: TransitionType.bendWNandES,
+        type: '/',
         from: OffsetCoord(row: 1, col: 0),
         to: [OffsetCoord(row: 0, col: 1)],
       ),
@@ -95,22 +54,22 @@ Map<String, SquarefTransitionDefs> charTransitionMap = {
     symbol: r'\',
     allDefs: [
       TransitionDef(
-        type: TransitionType.bendWSandEN,
+        type: r'\',
         from: OffsetCoord(row: 0, col: -1),
         to: [OffsetCoord(row: 1, col: 0)],
       ),
       TransitionDef(
-        type: TransitionType.bendWSandEN,
+        type: r'\',
         from: OffsetCoord(row: 0, col: 1),
         to: [OffsetCoord(row: -1, col: 0)],
       ),
       TransitionDef(
-        type: TransitionType.bendWSandEN,
+        type: r'\',
         from: OffsetCoord(row: -1, col: 0),
         to: [OffsetCoord(row: 0, col: 1)],
       ),
       TransitionDef(
-        type: TransitionType.bendWSandEN,
+        type: r'\',
         from: OffsetCoord(row: 1, col: 0),
         to: [OffsetCoord(row: 0, col: -1)],
       ),
@@ -120,22 +79,22 @@ Map<String, SquarefTransitionDefs> charTransitionMap = {
     symbol: '|',
     allDefs: [
       TransitionDef(
-        type: TransitionType.passNSsplitWE,
+        type: '|',
         from: OffsetCoord(row: 0, col: -1),
         to: [OffsetCoord(row: 1, col: 0), OffsetCoord(row: -1, col: 0)],
       ),
       TransitionDef(
-        type: TransitionType.passNSsplitWE,
+        type: '|',
         from: OffsetCoord(row: 0, col: 1),
         to: [OffsetCoord(row: 1, col: 0), OffsetCoord(row: -1, col: 0)],
       ),
       TransitionDef(
-        type: TransitionType.passNSsplitWE,
+        type: '|',
         from: OffsetCoord(row: -1, col: 0),
         to: [OffsetCoord(row: 1, col: 0)],
       ),
       TransitionDef(
-        type: TransitionType.passNSsplitWE,
+        type: '|',
         from: OffsetCoord(row: 1, col: 0),
         to: [OffsetCoord(row: -1, col: 0)],
       ),
@@ -145,22 +104,22 @@ Map<String, SquarefTransitionDefs> charTransitionMap = {
     symbol: '-',
     allDefs: [
       TransitionDef(
-        type: TransitionType.passWEsplitNS,
+        type: '-',
         from: OffsetCoord(row: 0, col: -1),
         to: [OffsetCoord(row: 0, col: 1)],
       ),
       TransitionDef(
-        type: TransitionType.passWEsplitNS,
+        type: '-',
         from: OffsetCoord(row: 0, col: 1),
         to: [OffsetCoord(row: 0, col: -1)],
       ),
       TransitionDef(
-        type: TransitionType.passWEsplitNS,
+        type: '-',
         from: OffsetCoord(row: -1, col: 0),
         to: [OffsetCoord(row: 0, col: -1), OffsetCoord(row: 0, col: 1)],
       ),
       TransitionDef(
-        type: TransitionType.passWEsplitNS,
+        type: '-',
         from: OffsetCoord(row: 1, col: 0),
         to: [OffsetCoord(row: 0, col: -1), OffsetCoord(row: 0, col: 1)],
       ),
@@ -170,22 +129,22 @@ Map<String, SquarefTransitionDefs> charTransitionMap = {
     symbol: '.',
     allDefs: [
       TransitionDef(
-        type: TransitionType.transparent,
+        type: '.',
         from: OffsetCoord(row: 0, col: -1),
         to: [OffsetCoord(row: 0, col: 1)],
       ),
       TransitionDef(
-        type: TransitionType.transparent,
+        type: '.',
         from: OffsetCoord(row: 0, col: 1),
         to: [OffsetCoord(row: 0, col: -1)],
       ),
       TransitionDef(
-        type: TransitionType.transparent,
+        type: '.',
         from: OffsetCoord(row: -1, col: 0),
         to: [OffsetCoord(row: 1, col: 0)],
       ),
       TransitionDef(
-        type: TransitionType.transparent,
+        type: '.',
         from: OffsetCoord(row: 1, col: 0),
         to: [OffsetCoord(row: -1, col: 0)],
       ),

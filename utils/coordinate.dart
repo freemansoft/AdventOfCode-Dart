@@ -55,3 +55,41 @@ class Transition {
     return '{ "from": $from , "to": $to}';
   }
 }
+
+/// an entry path and the relative exit paths for that entry
+///
+/// @param type used for debugging.
+/// @param from the entry vector
+/// @param to a list of possible exits
+///
+@immutable
+class TransitionDef {
+  const TransitionDef({
+    required this.type,
+    required this.from,
+    required this.to,
+  });
+  // used for tracking and logging
+  final String type;
+  // the relative location of the entry into the square
+  final OffsetCoord from;
+  // the relative exit directions - a given entry can have multiple exiting
+  final List<OffsetCoord> to;
+
+  @override
+  String toString() {
+    return '{"from": $from , "to": $to}';
+  }
+}
+
+/// Holds all the entry paths for a single square and the exits for each
+class SquarefTransitionDefs {
+  const SquarefTransitionDefs({required this.symbol, required this.allDefs});
+  final String symbol;
+  final List<TransitionDef> allDefs;
+
+  @override
+  String toString() {
+    return '"$symbol" $allDefs';
+  }
+}
