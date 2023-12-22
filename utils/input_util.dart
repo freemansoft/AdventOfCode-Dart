@@ -46,6 +46,10 @@ class InputUtil {
     return _inputAsString.split(pattern);
   }
 
+  /// reads the input
+  /// splitti the lines into paragraphs whenever finds blank line
+  /// Each outer list represents a paragraph or section
+  /// Each inner list represents the lines in that section
   List<List<String>> getParagraphLines() {
     final lines = getPerLine();
     final allParagraphs = <List<String>>[];
@@ -62,5 +66,27 @@ class InputUtil {
       allParagraphs.add(paragraph);
     }
     return allParagraphs;
+  }
+
+  /// Accepts the
+  /// * input from input.getPerLine()
+  /// * a split character that will bused to split each line
+  /// * a function called for each split that returns something of type T
+  ///
+  List<List<T>> perLineToCells<T>(
+    List<String> lines,
+    String splitChars,
+    T Function(String key) theFunc,
+  ) {
+    return lines
+        .map((e) => e.split(splitChars))
+        .map(
+          (e) => e
+              .map(
+                (f) => theFunc(f)!,
+              )
+              .toList(),
+        ) // List<List<T>> One Row
+        .toList();
   }
 }

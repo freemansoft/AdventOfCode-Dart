@@ -193,22 +193,17 @@ Map<String, SquarefTransitionDefs> charTransitionMap = {
   ),
 };
 
+// convert map [] to function ()
+SquarefTransitionDefs transitionMapForKey(String key) =>
+    charTransitionMap[key]!;
+
 class Day16 extends GenericDay {
   Day16() : super(16);
 
   @override
   Field<SquarefTransitionDefs> parseInput() {
-    final cells = input
-        .getPerLine()
-        .map((e) => e.split(''))
-        .map(
-          (e) => e
-              .map(
-                (f) => charTransitionMap[f]!,
-              )
-              .toList(),
-        ) // List<List<TransitionDef>> One Row
-        .toList();
+    final cells =
+        input.perLineToCells(input.getPerLine(), '', transitionMapForKey);
     final cellsAsFields = Field<SquarefTransitionDefs>(cells);
     return cellsAsFields;
   }
@@ -373,6 +368,7 @@ class Day16 extends GenericDay {
       onField: playingField,
     );
 
+    // Set removes any dups where a square was covered in differnet directions.
     final litSquares = completedTasks.map((e) => e.to).toSet();
 
     // print('solve1 - open ${openTasks.length} '
