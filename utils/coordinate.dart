@@ -93,3 +93,30 @@ class SquarefTransitionDefs {
     return '"$symbol" $allDefs';
   }
 }
+
+/// Used when we want to capture a position and
+/// an increment or step number that it was created in
+@immutable
+class StepCoordinate {
+  const StepCoordinate({required this.step, required this.location});
+
+  final int step;
+  final Coordinate location;
+
+  @override
+  bool operator ==(Object other) =>
+      other is StepCoordinate &&
+      other.runtimeType == runtimeType &&
+      other.location.row == location.row &&
+      other.location.col == location.col &&
+      other.step == step;
+
+  @override
+  int get hashCode =>
+      'step:$step row:${location.row},col:${location.col}'.hashCode;
+
+  @override
+  String toString() {
+    return '{ "step": $step, "row": ${location.row} , "col": ${location.col}}';
+  }
+}
