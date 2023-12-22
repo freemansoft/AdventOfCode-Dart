@@ -52,7 +52,9 @@ class Day21 extends GenericDay {
     required Field<String> onField,
   }) {
     while (openTasks.isNotEmpty) {
-      final currentTask = openTasks.last;
+      // .first is breadth first  .last is depth first
+      // can use .first to prune earlier steps
+      final currentTask = openTasks.first;
       openTasks.remove(currentTask);
       completedTasks.add(currentTask);
       if (currentTask.step < maxDepth) {
