@@ -58,40 +58,41 @@ class Day21 extends GenericDay {
       if (currentTask.step < maxDepth) {
         // print(
         //     'executing: $currentTask openTask: ${openTasks.length} completedTasks: ${completedTasks.length}');
+        // filter out the off board later
         final motion = [
           StepCoordinate(
             step: currentTask.step + 1,
             location: Coordinate(
-              row: max<int>([currentTask.location.row - 1, 0]) ?? -100,
+              row: currentTask.location.row - 1,
               col: currentTask.location.col,
             ),
           ),
           StepCoordinate(
               step: currentTask.step + 1,
               location: Coordinate(
-                row: min<int>(
-                        [currentTask.location.row + 1, onField.height - 1]) ??
-                    -100,
+                row: currentTask.location.row + 1,
                 col: currentTask.location.col,
               )),
           StepCoordinate(
               step: currentTask.step + 1,
               location: Coordinate(
                 row: currentTask.location.row,
-                col: max<int>([0, currentTask.location.col - 1]) ?? -100,
+                col: currentTask.location.col - 1,
               )),
           StepCoordinate(
               step: currentTask.step + 1,
               location: Coordinate(
                 row: currentTask.location.row,
-                col: min<int>(
-                        [currentTask.location.col + 1, onField.width - 1]) ??
-                    -100,
+                col: currentTask.location.col + 1,
               )),
         ];
 
         for (final oneCoord in motion) {
-          if (onField.getValueAt(
+          if (oneCoord.location.row >= 0 &&
+              oneCoord.location.row < onField.height &&
+              oneCoord.location.col >= 0 &&
+              oneCoord.location.col < onField.width &&
+              onField.getValueAt(
                     x: oneCoord.location.col,
                     y: oneCoord.location.row,
                   ) !=
@@ -124,7 +125,7 @@ class Day21 extends GenericDay {
       completedTasks: completedTasks,
       onField: playingField,
     );
-    print('$completedTasks');
+    print('evaulated ${completedTasks.length}');
     return completedTasks.fold(
         0,
         (previousValue, element) =>
