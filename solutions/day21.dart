@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 
 import '../utils/coordinate.dart';
 import '../utils/index.dart';
@@ -11,7 +10,7 @@ StepCoordinate findTheStart(Field<String> playingField) {
     for (var col = 0; col < playingField.width; col++) {
       if (playingField.getValueAt(x: col, y: row) == 'S') {
         return StepCoordinate(
-            step: 0, location: Coordinate(row: row, col: col));
+            step: 0, location: Coordinate(row: row, col: col),);
       }
     }
   }
@@ -74,19 +73,19 @@ class Day21 extends GenericDay {
               location: Coordinate(
                 row: currentTask.location.row + 1,
                 col: currentTask.location.col,
-              )),
+              ),),
           StepCoordinate(
               step: currentTask.step + 1,
               location: Coordinate(
                 row: currentTask.location.row,
                 col: currentTask.location.col - 1,
-              )),
+              ),),
           StepCoordinate(
               step: currentTask.step + 1,
               location: Coordinate(
                 row: currentTask.location.row,
                 col: currentTask.location.col + 1,
-              )),
+              ),),
         ];
 
         for (final oneCoord in motion) {
@@ -114,7 +113,7 @@ class Day21 extends GenericDay {
   }
 
   int solveOne(
-      int maxDepth, StepCoordinate findTheStart, Field<String> playingField) {
+      int maxDepth, StepCoordinate findTheStart, Field<String> playingField,) {
     // scheduled movements that have not yet all been consumed
     final openTasks = <StepCoordinate>{};
     // consumed used to do branch pruning and exit
@@ -131,6 +130,6 @@ class Day21 extends GenericDay {
     return completedTasks.fold(
         0,
         (previousValue, element) =>
-            element.step == maxDepth ? previousValue + 1 : previousValue);
+            element.step == maxDepth ? previousValue + 1 : previousValue,);
   }
 }
