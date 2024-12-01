@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:quiver/iterables.dart';
 
+/// Represents a single fixed location on a [Board]
 @immutable
 class Coordinate {
   const Coordinate({required this.row, required this.col});
@@ -23,7 +24,7 @@ class Coordinate {
   }
 }
 
-/// Relative coordinate - when you want to _force_ it
+/// Relative coordinate usually offset from some other location
 class OffsetCoordinate extends Coordinate {
   const OffsetCoordinate({required super.row, required super.col});
 
@@ -152,9 +153,10 @@ class StepCoordinate {
   }
 }
 
-/// this is a version of field cast to work with only coordinates
+/// this is a version of [Field] cast to work with only coordinates
 ///
-///
+
+/// A version of the Field callback that takes a [Coordinate]
 typedef VoidFieldCallback = void Function(Coordinate position);
 
 /// A helper class for easier work with 2D data.
