@@ -1,39 +1,103 @@
 import '../utils/index.dart';
 
-/// Every day should extend [GenericDay] to have access to the corresponding
-/// input and a common interface.
-///
-/// Naming convention is set to pad any single-digit day with `0` to have proper
-/// ordering of files and correct mapping between input for days and the day
-/// files.
 class Day01 extends GenericDay {
-  // call the superclass with an integer == today´s day
   Day01() : super(1);
 
-  /// The [InputUtil] can be accessed through the superclass variable `input`. \
-  /// There are several methods in that class that parse the input in different
-  /// ways, an example is given below
-  ///
-  /// The return type of this is `dynamic` for [GenericDay], so you can decide
-  /// on a day-to-day basis what this function should return.
-  @override
-  List<int> parseInput() {
-    final lines = input.getPerLine();
-    // exemplary usage of ParseUtil class
-    return ParseUtil.stringListToIntList(lines);
+  /// 2023 Day 1 Puzzle 1
+  /// convert the list of strings to a list of strings only containing digits
+  static List<String> digitsOnlyString(List<String> strings) {
+    final allReplaced =
+        strings.map((a) => a.replaceAll(RegExp('[^0-9]'), '')).toList();
+    //print('all replaced size: ${allReplaced.length}');
+    return allReplaced;
   }
 
-  /// The `solvePartX` methods always return a int, the puzzle solution. This
-  /// solution will be printed in main.
+  /// 2023 Day 1 Puzzle 2
+  /// the replacements must be left to right in source string
+  /// and not in order from this list
+  /// The null at the end is essentially the default of a switch statement
+  static final remapping = {
+    'zero': 0,
+    'one': 1,
+    'two': 2,
+    'three': 3,
+    'four': 4,
+    'five': 5,
+    'six': 6,
+    'seven': 7,
+    'eight': 8,
+    'nine': 9,
+    '0': 0,
+    '1': 1,
+    '2': 2,
+    '3': 3,
+    '4': 4,
+    '5': 5,
+    '6': 6,
+    '7': 7,
+    '8': 8,
+    '9': 9,
+    '': null,
+  };
+
+  /// Creates a list of single numbers / digits from a string
+  /// Extracts single numbers from string where numbers are words or digits
+  /// moves across substring starting with each char in the string
+  ///
+  /// 1. accepts a single string
+  /// 2. returns a list of numbers from the string
+  /// 3. checks if substring matches key of any map entry
+  /// 4. adds value to number list
+  List<int> convertStringtoListOfDigits(String oneRow) {
+    final replaced =
+        Iterable<String>.generate(oneRow.length, (i) => oneRow.substring(i))
+            .map(
+              (subOfOneRow) => remapping.entries
+                  .firstWhere((element) => subOfOneRow.startsWith(element.key))
+                  .value,
+            )
+            .whereNotNull()
+            .toList();
+    return replaced;
+  }
+
+  /// accepts list of strings representing rows
+  /// returns list of lists of all the numbers in each row
+  List<List<int>> wordsToDigetsString(List<String> allRows) {
+    final allReplaced = allRows
+        .map(
+          convertStringtoListOfDigits,
+        )
+        .toList();
+    return allReplaced;
+  }
+
+  @override
+  List<String> parseInput() {
+    // the input as a list of strings
+    return input.getPerLine();
+  }
+
   @override
   int solvePart1() {
-    // TODO implement
-    return 0;
+    final foo = parseInput();
+    final lineAllDigits = digitsOnlyString(foo);
+    final firstLastDigits =
+        lineAllDigits.map((e) => int.parse(e[0] + e[e.length - 1])).toList();
+
+    return firstLastDigits.sum;
   }
 
   @override
   int solvePart2() {
-    // TODO implement
-    return 0;
+    final rawText = parseInput();
+
+    final junkAndDigits = wordsToDigetsString(rawText);
+    // The number representation of a row is the first number concat with last
+    // or first*10+last
+    final firstLastDigits =
+        junkAndDigits.map((e) => e.first * 10 + e.last).toList();
+
+    return firstLastDigits.sum;
   }
 }
