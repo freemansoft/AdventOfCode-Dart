@@ -1,6 +1,6 @@
 # AdventOfCode-Starter-Darts
 
-This is a Starter project for [AdventOfCode](https://adventofcode.com/2024), written in `Dart`. Feel free to use it for your own adventures with the christmas-themed puzzles!
+This is a Starter project for [AdventOfCode](https://adventofcode.com/2023), written in `Dart`. Feel free to use it for your own adventures with the christmas-themed puzzles!
 
 ## How to use
 
@@ -8,7 +8,7 @@ The code is commented abundantly, but you can find an overview about the feature
 
 ### Setup
 
-Please visit the [AdventOfCode](https://adventofcode.com/2024) site and log in. After that, get your cookie from the browser, and add it to the day_generator.dart file´s `session` variable. This will allow the script to populate your input file.
+Please visit the [AdventOfCode](https://adventofcode.com/2023) site and log in. After that, get your cookie from the browser, and add it to the day_generator.dart file´s `session` variable. This will allow the script to populate your input file.
 
 ### Boilterplate Generation
 
@@ -61,4 +61,4 @@ When using the Boilerplate generator, everything is done for you automatically. 
 
 Contributing is greatly appreciated, just fork this project and create a Pull Request, or open an Issue!
 
-Fork of https://github.com/S-ecki/AdventOfCode-Starter-Dart
+Fork of <https://github.com/S-ecki/AdventOfCode-Starter-Dart>
