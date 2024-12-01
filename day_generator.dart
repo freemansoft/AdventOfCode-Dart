@@ -4,7 +4,7 @@ import 'dart:io';
 /// Small Program to be used to generate files and boilerplate for a given day.\
 /// Call with `dart run day_generator.dart <day>`
 void main(List<String?> args) async {
-  const year = '2023';
+  const year = '2024';
   const session = '<your session cookie here>';
 
   if (args.length > 1) {
@@ -40,7 +40,7 @@ void main(List<String?> args) async {
 
   final exportFile = File('solutions/index.dart');
   final exports = exportFile.readAsLinesSync();
-  final content = "export 'day$dayNumber.dart';\n";
+  final content = "export 'day$dayNumber.dart,';\n";
   var found = false;
   // check if line already exists
   for (final line in exports) {
@@ -81,12 +81,13 @@ void main(List<String?> args) async {
 String dayTemplate(String dayNumber) {
   return '''
 import '../utils/index.dart';
+// This import is changed when archived into history folder
 
 class Day$dayNumber extends GenericDay {
   Day$dayNumber() : super(${int.parse(dayNumber)});
 
   @override
-  parseInput() {
+  void parseInput() {
 
   }
 
@@ -102,6 +103,5 @@ class Day$dayNumber extends GenericDay {
     return 0;
   }
 }
-
 ''';
 }

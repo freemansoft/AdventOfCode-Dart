@@ -7,3 +7,4 @@ linter:
   rules:
     flutter_style_todos: false
     avoid_print: false
+    lines_longer_than_80_chars: false
