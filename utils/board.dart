@@ -5,7 +5,7 @@ import 'field.dart';
 
 /// Represents a single fixed location on a [Board]
 @immutable
-class Coordinate {
+abstract class Coordinate {
   const Coordinate({required this.row, required this.col});
   final int row;
   final int col;
@@ -27,6 +27,19 @@ class Coordinate {
 }
 
 /// Relative coordinate usually offset from some other location
+class AbsoluteCoordinate extends Coordinate {
+  const AbsoluteCoordinate({required super.row, required super.col});
+
+  @override
+  // ignore: hash_and_equals
+  bool operator ==(Object other) =>
+      other is AbsoluteCoordinate &&
+      other.runtimeType == runtimeType &&
+      other.row == row &&
+      other.col == col;
+}
+
+/// Relative coordinate usually offset from some other location
 class OffsetCoordinate extends Coordinate {
   const OffsetCoordinate({required super.row, required super.col});
 
@@ -43,8 +56,8 @@ class OffsetCoordinate extends Coordinate {
   OffsetCoordinate get invert => OffsetCoordinate(row: row * -1, col: col * -1);
 
   /// returns a coordinate resulting from this offset applied to the parameter
-  Coordinate absoluteFrom(Coordinate relativeTo) =>
-      Coordinate(row: relativeTo.row + row, col: relativeTo.col + col);
+  Coordinate absoluteFrom(AbsoluteCoordinate relativeTo) =>
+      AbsoluteCoordinate(row: relativeTo.row + row, col: relativeTo.col + col);
 }
 
 /// defines a transition into or out of a square
@@ -192,7 +205,7 @@ class Board<T> {
 
   /// Returns the value at the given coordinates.
   T getValueAt({required int row, required int col}) =>
-      getValueAtPosition(position: Coordinate(row: row, col: col));
+      getValueAtPosition(position: AbsoluteCoordinate(row: row, col: col));
 
   /// Sets the value at the given Position.
   void setValueAtPosition({required Coordinate position, required T value}) {
@@ -202,12 +215,12 @@ class Board<T> {
   /// Sets the value at the given coordinates.
   void setValueAt({required int row, required int col, required T value}) =>
       setValueAtPosition(
-        position: Coordinate(row: row, col: col),
+        position: AbsoluteCoordinate(row: row, col: col),
         value: value,
       );
 
   /// Returns whether the given position is inside of this field.
-  bool isOnField({required Coordinate position}) {
+  bool isOnboard({required Coordinate position}) {
     return position.row >= 0 &&
         position.col >= 0 &&
         position.col < boardWidth &&
@@ -215,11 +228,10 @@ class Board<T> {
   }
 
   /// Returns the whole row with given row index.
-  Iterable<T> getRow({required int row}) => board[row];
+  Iterable<T> getRow(int row) => board[row];
 
   /// Returns the whole column with given column index.
-  Iterable<T> getColumn({required int column}) =>
-      board.map((row) => row[column]);
+  Iterable<T> getColumn(int column) => board.map((row) => row[column]);
 
   /// Returns the minimum value in this field.
   T get minValue => min<T>(board.expand((element) => element))!;
@@ -231,7 +243,7 @@ class Board<T> {
   void forEach(VoidFieldCallback callback) {
     for (var row = 0; row < boardHeight; row++) {
       for (var col = 0; col < boardWidth; col++) {
-        callback(Coordinate(row: row, col: col));
+        callback(AbsoluteCoordinate(row: row, col: col));
       }
     }
   }
@@ -255,10 +267,10 @@ class Board<T> {
   /// This does **NOT** include diagonal neighbours.
   Iterable<Coordinate> adjacent(Coordinate target) {
     return <Coordinate>{
-      Coordinate(row: target.row - 1, col: target.col),
-      Coordinate(row: target.row, col: target.col + 1),
-      Coordinate(row: target.row + 1, col: target.col),
-      Coordinate(row: target.row, col: target.col - 1),
+      AbsoluteCoordinate(row: target.row - 1, col: target.col),
+      AbsoluteCoordinate(row: target.row, col: target.col + 1),
+      AbsoluteCoordinate(row: target.row + 1, col: target.col),
+      AbsoluteCoordinate(row: target.row, col: target.col - 1),
     }..removeWhere(
         (position) {
           return position.row < 0 ||
@@ -273,14 +285,14 @@ class Board<T> {
   /// **AND** diagonal neighbours.
   Iterable<Coordinate> neighbours(Coordinate target) {
     return <Coordinate>{
-      Coordinate(row: target.row - 1, col: target.col),
-      Coordinate(row: target.row - 1, col: target.col + 1),
-      Coordinate(row: target.row, col: target.col + 1),
-      Coordinate(row: target.row + 1, col: target.col + 1),
-      Coordinate(row: target.row + 1, col: target.col),
-      Coordinate(row: target.row + 1, col: target.col - 1),
-      Coordinate(row: target.row, col: target.col - 1),
-      Coordinate(row: target.row - 1, col: target.col - 1),
+      AbsoluteCoordinate(row: target.row - 1, col: target.col),
+      AbsoluteCoordinate(row: target.row - 1, col: target.col + 1),
+      AbsoluteCoordinate(row: target.row, col: target.col + 1),
+      AbsoluteCoordinate(row: target.row + 1, col: target.col + 1),
+      AbsoluteCoordinate(row: target.row + 1, col: target.col),
+      AbsoluteCoordinate(row: target.row + 1, col: target.col - 1),
+      AbsoluteCoordinate(row: target.row, col: target.col - 1),
+      AbsoluteCoordinate(row: target.row - 1, col: target.col - 1),
     }..removeWhere(
         (position) {
           return position.row < 0 ||
