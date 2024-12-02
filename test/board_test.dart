@@ -23,11 +23,12 @@ void main() {
       expect(board.getRow(0), equals(['00', '01', '02']));
       expect(board.getColumn(0), equals(['00', '10', '20']));
       expect(
-          board.adjacent(const AbsoluteCoordinate(row: 0, col: 0)),
-          equals([
-            const AbsoluteCoordinate(row: 0, col: 1),
-            const AbsoluteCoordinate(row: 1, col: 0)
-          ]));
+        board.adjacent(const AbsoluteCoordinate(row: 0, col: 0)),
+        equals([
+          const AbsoluteCoordinate(row: 0, col: 1),
+          const AbsoluteCoordinate(row: 1, col: 0),
+        ]),
+      );
     });
 
     test('AbsoluteCoordinate', () {
