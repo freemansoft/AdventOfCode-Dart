@@ -1,6 +1,8 @@
 import 'package:meta/meta.dart';
 import 'package:quiver/iterables.dart';
 
+import 'field.dart';
+
 /// Represents a single fixed location on a [Board]
 @immutable
 class Coordinate {
@@ -200,7 +202,9 @@ class Board<T> {
   /// Sets the value at the given coordinates.
   void setValueAt({required int row, required int col, required T value}) =>
       setValueAtPosition(
-          position: Coordinate(row: row, col: col), value: value);
+        position: Coordinate(row: row, col: col),
+        value: value,
+      );
 
   /// Returns whether the given position is inside of this field.
   bool isOnField({required Coordinate position}) {
