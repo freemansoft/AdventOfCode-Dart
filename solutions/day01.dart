@@ -1,39 +1,55 @@
 import '../utils/index.dart';
 
-/// Every day should extend [GenericDay] to have access to the corresponding
-/// input and a common interface.
-///
-/// Naming convention is set to pad any single-digit day with `0` to have proper
-/// ordering of files and correct mapping between input for days and the day
-/// files.
 class Day01 extends GenericDay {
-  // call the superclass with an integer == today´s day
   Day01() : super(1);
 
-  /// The [InputUtil] can be accessed through the superclass variable `input`. \
-  /// There are several methods in that class that parse the input in different
-  /// ways, an example is given below
-  ///
-  /// The return type of this is `dynamic` for [GenericDay], so you can decide
-  /// on a day-to-day basis what this function should return.
+  List<List<int>> intCells = [[]];
+
   @override
-  List<int> parseInput() {
-    final lines = input.getPerLine();
-    // exemplary usage of ParseUtil class
-    return ParseUtil.stringListToIntList(lines);
+  void parseInput() {
+    final inputUtil = InputUtil(1);
+    print('${inputUtil.getPerLine()}');
+    intCells = inputUtil.perLineToCells<int>(
+      input.getPerLine(),
+      '   ',
+      parseIt,
+    );
   }
 
-  /// The `solvePartX` methods always return a int, the puzzle solution. This
-  /// solution will be printed in main.
+  int parseIt(String s) {
+    //print(s);
+    return int.parse(s.trim());
+  }
+
   @override
   int solvePart1() {
-    // TODO implement
-    return 0;
+    parseInput();
+    final col0Sorted = intCells.map((e) => e[0]).toList()..sort();
+    final col1Sorted = intCells.map((e) => e[1]).toList()..sort();
+    print(col0Sorted);
+    print(col1Sorted);
+    var sum = 0;
+    for (var i = 0; i < col0Sorted.length; i++) {
+      final diff = (col0Sorted[i] - col1Sorted[i]).abs();
+      print(' ${col0Sorted[i]} - ${col1Sorted[i]} = $diff');
+      // print('$
+      sum += diff;
+    }
+    print(sum);
+    return sum;
   }
 
   @override
   int solvePart2() {
-    // TODO implement
-    return 0;
+    parseInput();
+    final col0 = intCells.map((e) => e[0]).toList();
+    final col1 = intCells.map((e) => e[1]).toList();
+    var sum = 0;
+    for (var i = 0; i < col0.length; i++) {
+      final newValue = col1.where((item) => item == col0[i]).length * col0[i];
+      print(' ${col0[i]} $newValue');
+      sum += newValue;
+    }
+    return sum;
   }
 }
