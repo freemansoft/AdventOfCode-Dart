@@ -1,9 +1,9 @@
 // Import the test package
-
 import 'package:test/test.dart';
-
 import '../utils/board.dart';
 
+/// Board tests
+/// Needs more tests
 void main() {
   // Group your tests together
   group('Board Tests', () {
@@ -60,6 +60,28 @@ void main() {
         coord.absoluteFrom(const AbsoluteCoordinate(row: 1, col: 1)),
         equals(const AbsoluteCoordinate(row: 3, col: 4)),
       );
+    });
+  });
+
+  group('IntegerBoard Tests', () {
+    // Test case for addition of positive numbers
+    test('create integer board and increment', () {
+      final board = Board<int>(
+        field: [
+          [00, 01, 02],
+          [10, 11, 12],
+          [20, 21, 22],
+        ],
+      ); // Assuming Board is a class you want to test
+
+      expect(board.boardWidth, equals(3));
+      expect(board.boardHeight, equals(3));
+      expect(board.getValueAt(row: 1, col: 1), equals(11));
+      board.increment(
+        row: 1,
+        col: 1,
+      );
+      expect(board.getValueAt(row: 1, col: 1), equals(12));
     });
   });
 }
