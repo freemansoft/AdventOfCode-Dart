@@ -90,7 +90,7 @@ class InputUtil {
 
   /// Accepts the
   /// * input from input.getPerLine()
-  /// * a split character that will bused to split each line
+  /// * a split character that will be used to split each line
   /// * a function called for each split that returns something of type T
   ///
   List<List<T>> perLineToCells<T>(
