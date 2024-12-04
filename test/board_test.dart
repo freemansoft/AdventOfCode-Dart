@@ -61,6 +61,40 @@ void main() {
         equals(const AbsoluteCoordinate(row: 3, col: 4)),
       );
     });
+
+    test('find positionsOf', () {
+      final board = Board<String>(
+        field: [
+          ['00', '01', '11'],
+          ['10', '11', '12'],
+          ['11', '21', '22'],
+        ],
+      ); // Assuming Board is a class you want to test
+
+      expect(board.boardWidth, equals(3));
+      expect(board.boardHeight, equals(3));
+      final foundLocations = board.positionsOf('11');
+      expect(
+        foundLocations.length,
+        equals(3),
+      );
+      expect(
+        foundLocations.contains(const AbsoluteCoordinate(row: 0, col: 2)),
+        isTrue,
+      );
+      expect(
+        foundLocations.contains(const AbsoluteCoordinate(row: 1, col: 1)),
+        isTrue,
+      );
+      expect(
+        foundLocations.contains(const AbsoluteCoordinate(row: 2, col: 0)),
+        isTrue,
+      );
+      expect(
+        foundLocations.contains(const AbsoluteCoordinate(row: 2, col: 2)),
+        isFalse,
+      );
+    });
   });
 
   group('IntegerBoard Tests', () {

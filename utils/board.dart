@@ -260,6 +260,21 @@ class Board<T> {
       .expand((element) => element)
       .fold<int>(0, (acc, elem) => elem == searched ? acc + 1 : acc);
 
+  // Returns all the locations of a value
+  List<Coordinate> positionsOf(T searched) {
+    final positions = <Coordinate>[];
+
+    for (var row = 0; row < boardHeight; row++) {
+      for (var col = 0; col < boardWidth; col++) {
+        if (board[row][col] == searched) {
+          positions.add(AbsoluteCoordinate(row: row, col: col));
+        }
+      }
+    }
+
+    return positions;
+  }
+
   /// Returns all adjacent cells to the given position.
   /// This does **NOT** include diagonal neighbours.
   Iterable<Coordinate> adjacent(Coordinate target) {
