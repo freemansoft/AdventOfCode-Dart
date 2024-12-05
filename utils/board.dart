@@ -339,7 +339,7 @@ class Board<T> {
   /// Returns all positional neighbours of a point that have the searched value
   /// This includes the adjacent **AND** diagonal neighbours.
   Iterable<AbsoluteCoordinate> neighboursWhere(Coordinate target, T searched) {
-    print('neigborsWhere ( target: $target, searched: $searched )');
+    //print('neighborsWhere ( target: $target, searched: $searched )');
     return <AbsoluteCoordinate>{
       AbsoluteCoordinate(row: target.row - 1, col: target.col),
       AbsoluteCoordinate(row: target.row - 1, col: target.col + 1),
@@ -360,8 +360,8 @@ class Board<T> {
       )
       ..removeWhere(
         (position) {
-          print('$position - ${board[position.row][position.col]} != $searched '
-              '${board[position.row][position.col] != searched} ');
+          // print('$position - ${board[position.row][position.col]} != $searched '
+          //     '${board[position.row][position.col] != searched} ');
           return board[position.row][position.col] != searched;
         },
       );
