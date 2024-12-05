@@ -360,7 +360,8 @@ class Board<T> {
       )
       ..removeWhere(
         (position) {
-          // print('$position - ${board[position.row][position.col]} != $searched '
+          // print('$position: '
+          //     '${board[position.row][position.col]} != $searched '
           //     '${board[position.row][position.col] != searched} ');
           return board[position.row][position.col] != searched;
         },

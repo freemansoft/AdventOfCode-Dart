@@ -38,12 +38,12 @@ class Day05 extends GenericDay {
             // could skip if !pageValid already from previous pass
             if (pageOrders.contains('$currentPage|$nextPage')) {
               pageValid &= true;
-              print(
-                  'currentPage: $currentPage nextPage: $nextPage setting true');
+              print('currentPage: $currentPage nextPage: $nextPage '
+                  'setting true');
             } else {
               pageValid = false;
-              print(
-                  'currentPage: $currentPage nextPage: $nextPage pageValid: $pageValid');
+              print('currentPage: $currentPage nextPage: $nextPage '
+                  'pageValid: $pageValid');
             }
             // could break out after one bad page but I'm lazy
           }
