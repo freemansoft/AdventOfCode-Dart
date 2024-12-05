@@ -41,7 +41,8 @@ class Day02 extends GenericDay {
     for (var i = 0; i < intCells.length; i++) {
       var isGood = true;
       print(
-          'vs descending ${intCells[i]}, ${sortedDecreasing[i]} === vs ascending ${intCells[i]}, ${sortedIncreasing[i]}');
+        'vs descending ${intCells[i]}, ${sortedDecreasing[i]} === vs ascending ${intCells[i]}, ${sortedIncreasing[i]}',
+      );
       if (sortedDecreasing[i].equals(intCells[i])) {
         for (var j = 0; j < intCells[i].length - 1; j++) {
           final difference =

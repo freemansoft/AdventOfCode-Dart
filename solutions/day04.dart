@@ -6,7 +6,7 @@ class Day04 extends GenericDay {
   @override
   List<List<String>> parseInput() {
     final inputTool = InputUtil(4);
-    var charForField = inputTool.perLineToCells(
+    final charForField = inputTool.perLineToCells(
       inputTool.getPerLine(),
       '',
       (String aChar) => aChar,

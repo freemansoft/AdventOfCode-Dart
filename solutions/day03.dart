@@ -14,16 +14,16 @@ class Day03 extends GenericDay {
     print('*********** part 1 **************');
     var sumOfOperators = 0;
     final data = parseInput() as List<String>;
-    for (var line in data) {
+    for (final line in data) {
       // only supporting single operand type
       final clauses = line.split('mul');
       print(clauses);
-      for (var aClause in clauses) {
+      for (final aClause in clauses) {
         // the first right paren.  ignore the rest
         final endParen = aClause.indexOf(')');
         if (endParen > 0 && aClause.startsWith('(')) {
           final aClauseNoParen = aClause.substring(1, endParen);
-          print('evaluate $aClause as ${aClauseNoParen}');
+          print('evaluate $aClause as $aClauseNoParen');
           try {
             final operands = aClauseNoParen.split(',').map(int.parse).toList();
             if (operands.length == 2) {
