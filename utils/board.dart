@@ -1,6 +1,8 @@
 import 'package:meta/meta.dart';
 import 'package:quiver/iterables.dart';
 
+import 'index.dart';
+
 /// A game board (or playing field) with some helper classes
 /// Using model objects instead of Tuples
 
@@ -28,8 +30,14 @@ abstract class Coordinate {
 }
 
 /// Relative coordinate usually offset from some other location
-class AbsoluteCoordinate extends Coordinate {
+class AbsoluteCoordinate extends Coordinate
+    implements Comparable<AbsoluteCoordinate> {
   const AbsoluteCoordinate({required super.row, required super.col});
+
+  /// Returns offset that the passed in coorinate is from this coordinate
+  /// Add the calulated offset to this coordinate to get relativeTo
+  OffsetCoordinate offsetTo(AbsoluteCoordinate relativeTo) =>
+      OffsetCoordinate(row: relativeTo.row - row, col: relativeTo.col - col);
 
   @override
   // ignore: hash_and_equals
@@ -38,6 +46,16 @@ class AbsoluteCoordinate extends Coordinate {
       other.runtimeType == runtimeType &&
       other.row == row &&
       other.col == col;
+
+  /// row major order comparator
+  @override
+  int compareTo(AbsoluteCoordinate other) {
+    if (row < other.row) return -1;
+    if (row > other.row) return 1;
+    if (col < other.col) return 1;
+    if (col > other.col) return 1;
+    return 0;
+  }
 }
 
 /// Relative coordinate usually offset from some other location
@@ -57,7 +75,7 @@ class OffsetCoordinate extends Coordinate {
   OffsetCoordinate get invert => OffsetCoordinate(row: row * -1, col: col * -1);
 
   /// returns a coordinate resulting from this offset applied to the parameter
-  Coordinate absoluteFrom(AbsoluteCoordinate relativeTo) =>
+  AbsoluteCoordinate absoluteFrom(AbsoluteCoordinate relativeTo) =>
       AbsoluteCoordinate(row: relativeTo.row + row, col: relativeTo.col + col);
 }
 
@@ -261,24 +279,27 @@ class Board<T> {
       .fold<int>(0, (acc, elem) => elem == searched ? acc + 1 : acc);
 
   // Returns all the locations of a value
-  List<Coordinate> positionsOf(T searched) {
-    final positions = <Coordinate>[];
-
-    for (var row = 0; row < boardHeight; row++) {
-      for (var col = 0; col < boardWidth; col++) {
-        if (board[row][col] == searched) {
-          positions.add(AbsoluteCoordinate(row: row, col: col));
-        }
-      }
-    }
+  Iterable<AbsoluteCoordinate> positionsOf(T searched) {
+    final positions = List<List<AbsoluteCoordinate>>.generate(
+      boardHeight,
+      (row) => List<AbsoluteCoordinate>.generate(
+        boardWidth,
+        (col) => board[row][col] == searched
+            ? AbsoluteCoordinate(row: row, col: col)
+            : const AbsoluteCoordinate(row: -1, col: -1),
+      )..removeWhere(
+          (coordinate) =>
+              coordinate == const AbsoluteCoordinate(row: -1, col: -1),
+        ),
+    ).expand((i) => i);
 
     return positions;
   }
 
   /// Returns all adjacent cells to the given position.
   /// This does **NOT** include diagonal neighbours.
-  Iterable<Coordinate> adjacent(Coordinate target) {
-    return <Coordinate>{
+  Iterable<AbsoluteCoordinate> adjacent(Coordinate target) {
+    return <AbsoluteCoordinate>{
       AbsoluteCoordinate(row: target.row - 1, col: target.col),
       AbsoluteCoordinate(row: target.row, col: target.col + 1),
       AbsoluteCoordinate(row: target.row + 1, col: target.col),
@@ -295,8 +316,8 @@ class Board<T> {
 
   /// Returns all positional neighbours of a point. This includes the adjacent
   /// **AND** diagonal neighbours.
-  Iterable<Coordinate> neighbours(Coordinate target) {
-    return <Coordinate>{
+  Iterable<AbsoluteCoordinate> neighbours(Coordinate target) {
+    return <AbsoluteCoordinate>{
       AbsoluteCoordinate(row: target.row - 1, col: target.col),
       AbsoluteCoordinate(row: target.row - 1, col: target.col + 1),
       AbsoluteCoordinate(row: target.row, col: target.col + 1),
@@ -311,6 +332,37 @@ class Board<T> {
               position.col < 0 ||
               position.col >= boardWidth ||
               position.row >= boardHeight;
+        },
+      );
+  }
+
+  /// Returns all positional neighbours of a point that have the searched value
+  /// This includes the adjacent **AND** diagonal neighbours.
+  Iterable<AbsoluteCoordinate> neighboursWhere(Coordinate target, T searched) {
+    print('neigborsWhere ( target: $target, searched: $searched )');
+    return <AbsoluteCoordinate>{
+      AbsoluteCoordinate(row: target.row - 1, col: target.col),
+      AbsoluteCoordinate(row: target.row - 1, col: target.col + 1),
+      AbsoluteCoordinate(row: target.row, col: target.col + 1),
+      AbsoluteCoordinate(row: target.row + 1, col: target.col + 1),
+      AbsoluteCoordinate(row: target.row + 1, col: target.col),
+      AbsoluteCoordinate(row: target.row + 1, col: target.col - 1),
+      AbsoluteCoordinate(row: target.row, col: target.col - 1),
+      AbsoluteCoordinate(row: target.row - 1, col: target.col - 1),
+    }
+      ..removeWhere(
+        (position) {
+          return position.row < 0 ||
+              position.col < 0 ||
+              position.col >= boardWidth ||
+              position.row >= boardHeight;
+        },
+      )
+      ..removeWhere(
+        (position) {
+          print('$position - ${board[position.row][position.col]} != $searched '
+              '${board[position.row][position.col] != searched} ');
+          return board[position.row][position.col] != searched;
         },
       );
   }

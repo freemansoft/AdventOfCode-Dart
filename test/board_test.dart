@@ -5,6 +5,21 @@ import '../utils/board.dart';
 /// Board tests
 /// Needs more tests
 void main() {
+  group('Coordinate Tests', () {
+    // Test case for addition of positive numbers
+    test('verify offsetTo', () {
+      const coord = AbsoluteCoordinate(row: 2, col: 3);
+      const targetCoord = AbsoluteCoordinate(row: 8, col: 8);
+
+      expect(
+        coord.offsetTo(targetCoord),
+        equals(
+          const OffsetCoordinate(row: 6, col: 5),
+        ),
+      );
+    });
+  });
+
   // Group your tests together
   group('Board Tests', () {
     // Test case for addition of positive numbers
