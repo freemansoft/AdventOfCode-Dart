@@ -12,7 +12,9 @@ int or(int a, int b) => int.parse(a.toString() + b.toString());
 List<OperatorFunction> operatorsMulAdd = [multiply, add];
 List<OperatorFunction> operatorsMulAddOr = [multiply, add, or];
 
-List<int> operatorPermutations(
+/// could have passed in the target value to short circuit and not
+/// evaluate all options every time
+List<int> valuesForAllPermutations(
   List<int> operands,
   List<OperatorFunction> allowedOperators,
 ) {
@@ -80,10 +82,9 @@ class Day07 extends GenericDay {
 
     var sumSolved = 0;
     for (var i = 0; i < values.length; i++) {
-      print('target value: ${values[i]}');
-      print('operands: ${operands[i]}');
+      print('target value: ${values[i]} operands: ${operands[i]}');
       final possibleAnswers =
-          operatorPermutations(operands[i], operatorsMulAdd);
+          valuesForAllPermutations(operands[i], operatorsMulAdd);
       if (possibleAnswers.contains(values[i])) {
         sumSolved += values[i];
       }
@@ -97,15 +98,14 @@ class Day07 extends GenericDay {
 
     var sumSolved = 0;
     for (var i = 0; i < values.length; i++) {
-      print('target value: ${values[i]}');
-      print('operands: ${operands[i]}');
+      print('target value: ${values[i]} operands: ${operands[i]}');
       final possibleAnswers =
-          operatorPermutations(operands[i], operatorsMulAdd);
+          valuesForAllPermutations(operands[i], operatorsMulAdd);
       if (possibleAnswers.contains(values[i])) {
         sumSolved += values[i];
       } else {
         final possibleAnswers2 =
-            operatorPermutations(operands[i], operatorsMulAddOr);
+            valuesForAllPermutations(operands[i], operatorsMulAddOr);
         if (possibleAnswers2.contains(values[i])) {
           sumSolved += values[i];
         }
