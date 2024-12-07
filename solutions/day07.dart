@@ -13,7 +13,9 @@ List<OperatorFunction> operatorsMulAdd = [multiply, add];
 List<OperatorFunction> operatorsMulAddOr = [multiply, add, or];
 
 List<int> operatorPermutations(
-    List<int> operands, List<OperatorFunction> allowedOperators) {
+  List<int> operands,
+  List<OperatorFunction> allowedOperators,
+) {
   final descentCalculations =
       descent(operands[0], operands.sublist(1), allowedOperators);
   print('descent results: $descentCalculations');
@@ -36,7 +38,10 @@ List<int> operatorPermutations(
 /// c=3 2^3 = 8
 /// c=4 2^4 = 16
 List<int> descent(
-    int current, List<int> operands, List<OperatorFunction> allowedOperators) {
+  int current,
+  List<int> operands,
+  List<OperatorFunction> allowedOperators,
+) {
   final foo = <int>[];
   for (final aFunc in allowedOperators) {
     final newValue = aFunc(current, operands[0]);
