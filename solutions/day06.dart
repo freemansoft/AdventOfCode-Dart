@@ -1,7 +1,4 @@
-import '../tool/generic_day.dart';
-import '../utils/board.dart';
 import '../utils/index.dart';
-import '../utils/input_util.dart';
 
 class Day06 extends GenericDay {
   Day06() : super(6);
@@ -44,7 +41,7 @@ class Day06 extends GenericDay {
       // left the board
       return [guardOrientation.from];
     } else if (board.getValueAtPosition(position: proposedTarget) == '#') {
-      var newTo = turnRight(guardOrientation.to);
+      final newTo = turnRight(guardOrientation.to);
       return advanceAll(
         board: board,
         guardOrientation: Transition(from: guardOrientation.from, to: newTo),

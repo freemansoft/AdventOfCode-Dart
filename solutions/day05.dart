@@ -20,10 +20,11 @@ class Day05 extends GenericDay {
 
   @override
   int solvePart1() {
-    return 0;
     parseInput();
     final pageSetValidity = calcPageSetValidity(
-        dataSet: pagesToPrint, pageOrderRules: pageOrderPolicies);
+      dataSet: pagesToPrint,
+      pageOrderRules: pageOrderPolicies,
+    );
     print('$pageSetValidity');
     return middlePagesOf(
       dataSet: pagesToPrint,
@@ -36,7 +37,9 @@ class Day05 extends GenericDay {
   int solvePart2() {
     parseInput();
     final pageSetValidity = calcPageSetValidity(
-        dataSet: pagesToPrint, pageOrderRules: pageOrderPolicies);
+      dataSet: pagesToPrint,
+      pageOrderRules: pageOrderPolicies,
+    );
     print('$pageSetValidity');
     final reorderedSet = reorderAllSetsToValid(
       dataSet: pagesToPrint,
@@ -52,9 +55,10 @@ class Day05 extends GenericDay {
   }
 
   /// figure out which page sets are valid
-  List<bool> calcPageSetValidity(
-      {required List<List<String>> dataSet,
-      required List<String> pageOrderRules}) {
+  List<bool> calcPageSetValidity({
+    required List<List<String>> dataSet,
+    required List<String> pageOrderRules,
+  }) {
     final pageSetValidity = <bool>[];
 
     for (final pageSet in dataSet) {
@@ -92,10 +96,11 @@ class Day05 extends GenericDay {
   }
 
   /// return the sum of the middle pages
-  int middlePagesOf(
-      {required List<List<String>> dataSet,
-      required List<bool> validityMarkers,
-      required bool targetState}) {
+  int middlePagesOf({
+    required List<List<String>> dataSet,
+    required List<bool> validityMarkers,
+    required bool targetState,
+  }) {
     var pageSum = 0;
     for (var i = 0; i < validityMarkers.length; i++) {
       if (validityMarkers[i] == targetState) {
@@ -123,7 +128,8 @@ class Day05 extends GenericDay {
       } else {
         // shuffle the invalid set
         allValidPageSets.add(
-            reorderOneSet(pageSet: dataSet[i], pageOrderRules: pageOrderRules));
+          reorderOneSet(pageSet: dataSet[i], pageOrderRules: pageOrderRules),
+        );
       }
     }
     return allValidPageSets;
