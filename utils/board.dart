@@ -108,7 +108,8 @@ class Transition<IT extends Coordinate, OT extends Coordinate> {
 /// used for inbound relative transitions to a fixed square
 /// (-1,-2) => (3,4)   ===> originated from (2,2)
 ///
-class OffsetInboundTransition extends Transition<OffsetCoordinate, Coordinate> {
+class OffsetInboundTransition
+    extends Transition<OffsetCoordinate, AbsoluteCoordinate> {
   const OffsetInboundTransition({required super.from, required super.to});
 }
 
@@ -116,7 +117,7 @@ class OffsetInboundTransition extends Transition<OffsetCoordinate, Coordinate> {
 /// (3,4) => (-1,-2)  ===> ended on (2,2)
 ///
 class OffsetOutboundTransition
-    extends Transition<Coordinate, OffsetCoordinate> {
+    extends Transition<AbsoluteCoordinate, OffsetCoordinate> {
   const OffsetOutboundTransition({required super.from, required super.to});
 }
 
@@ -387,6 +388,16 @@ class Board<T> {
       result.write('\n');
     }
     return result.toString();
+  }
+
+  bool containsPosition(AbsoluteCoordinate proposedTarget) {
+    if (proposedTarget.row < 0 ||
+        proposedTarget.col < 0 ||
+        proposedTarget.row >= boardHeight ||
+        proposedTarget.col >= boardWidth) {
+      return false;
+    }
+    return true;
   }
 }
 
