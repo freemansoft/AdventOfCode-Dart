@@ -18,7 +18,8 @@ List<int> operatorPermutations(
 ) {
   final descentCalculations =
       descent(operands[0], operands.sublist(1), allowedOperators);
-  print('descent results: $descentCalculations');
+  print('identified ${descentCalculations.length} possibilities with'
+      ' ${allowedOperators.length} operation types');
   return descentCalculations;
 }
 
