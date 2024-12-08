@@ -105,6 +105,40 @@ class Transition<IT extends Coordinate, OT extends Coordinate> {
   }
 }
 
+/// a specialization of Transition primarily for readability
+/// consider non directed for == versus transition which is directed
+@immutable
+class CoordinatePair {
+  const CoordinatePair({required this.from, required this.to});
+  // relative or absolute originating square
+  final AbsoluteCoordinate from;
+  // relative or absolute target square
+  final AbsoluteCoordinate to;
+
+  // the offset from->to
+  // add the offset to from to get to
+  // convenience for the Absolute coordinate offset
+  OffsetCoordinate offset() {
+    return from.offsetTo(to);
+  }
+
+  // consider reveresed pairs as equivalent for ==
+  @override
+  bool operator ==(Object other) =>
+      other is CoordinatePair &&
+      other.runtimeType == runtimeType &&
+      ((other.from == from && other.to == to) ||
+          (other.from == to && other.to == from));
+
+  @override
+  int get hashCode => 'from:$from,to:$to'.hashCode;
+
+  @override
+  String toString() {
+    return '{ "from": $from , "to": $to}';
+  }
+}
+
 /// used for inbound relative transitions to a fixed square
 /// (-1,-2) => (3,4)   ===> originated from (2,2)
 ///
@@ -398,6 +432,28 @@ class Board<T> {
       return false;
     }
     return true;
+  }
+
+  // return a list of locations for each value on the board
+  // can ignore a value like the empty position on a board Ex: ' ' or '.'
+  // kind of a global findPositionsOf()
+  Map<T, List<AbsoluteCoordinate>> positionsOfAll({T? ignoreValue}) {
+    final locations = <T, List<AbsoluteCoordinate>>{};
+    for (var row = 0; row < boardHeight; row++) {
+      for (var col = 0; col < boardWidth; col++) {
+        // what value is at this location in the board?
+        final locationValue = getValueAt(row: row, col: col);
+        if (ignoreValue == null || locationValue != ignoreValue) {
+          // if no entry already in return map then add the empty collection
+          if (!locations.containsKey(locationValue)) {
+            locations[locationValue] = <AbsoluteCoordinate>[];
+          }
+          // add this location to the location list for this value
+          locations[locationValue]!.add(AbsoluteCoordinate(row: row, col: col));
+        }
+      }
+    }
+    return locations;
   }
 }
 

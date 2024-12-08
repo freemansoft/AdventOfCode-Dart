@@ -10,22 +10,22 @@ class Day05 extends GenericDay {
     final inputTool = InputUtil(5);
     final paragraphs = inputTool.getParagraphLines();
     // first pargraph is page orders
-
-    // second paragraph is needed pages
     pageOrderPolicies = paragraphs[0];
+    // second paragraph is needed pages
     pagesToPrint = paragraphs[1].map((e) => e.split(',')).toList();
-    print('pageOrders: $pageOrderPolicies');
-    print('pagesToPrint: $pagesToPrint');
+    //print('pageOrders: $pageOrderPolicies');
+    //print('pagesToPrint: $pagesToPrint');
   }
 
   @override
   int solvePart1() {
     parseInput();
+    // get the map of sets that are valid
     final pageSetValidity = calcPageSetValidity(
       dataSet: pagesToPrint,
       pageOrderRules: pageOrderPolicies,
     );
-    print('$pageSetValidity');
+    // now add up the middle pages of those that are valid
     return middlePagesOf(
       dataSet: pagesToPrint,
       validityMarkers: pageSetValidity,
@@ -36,17 +36,17 @@ class Day05 extends GenericDay {
   @override
   int solvePart2() {
     parseInput();
+
+    // get the map of sets that are valid in the read in dataset
     final pageSetValidity = calcPageSetValidity(
       dataSet: pagesToPrint,
       pageOrderRules: pageOrderPolicies,
     );
-    print('$pageSetValidity');
-    final reorderedSet = reorderAllSetsToValid(
-      dataSet: pagesToPrint,
-      pageOrderRules: pageOrderPolicies,
-      validitySet: pageSetValidity,
-    );
-    print('reorderedSets $reorderedSet');
+    // create a data set that has everything reordered correctly
+    final reorderedSet =
+        sortAllSets(dataSet: pagesToPrint, pageOrderRules: pageOrderPolicies);
+
+    // the original validity map tells which ones we changed and we add them
     return middlePagesOf(
       dataSet: reorderedSet,
       validityMarkers: pageSetValidity,
@@ -55,43 +55,18 @@ class Day05 extends GenericDay {
   }
 
   /// figure out which page sets are valid
+  /// Used for problem answer discrimination
   List<bool> calcPageSetValidity({
     required List<List<String>> dataSet,
     required List<String> pageOrderRules,
   }) {
-    final pageSetValidity = <bool>[];
+    final sortedSets =
+        sortAllSets(dataSet: dataSet, pageOrderRules: pageOrderRules);
 
-    for (final pageSet in dataSet) {
-      print('examining pageSet: $pageSet');
-      var pageSetValid = true;
-      // examine each page
-      for (var index = 0; index < pageSet.length - 1; index++) {
-        var pageValid = true;
-        final currentPage = pageSet[index];
-        // sweep across all the pages after it - they all must be valid
-        for (var index2 = index + 1; index2 < pageSet.length; index2++) {
-          final nextPage = pageSet[index2];
-          print('currentPage $currentPage : nextPage $nextPage');
-          // could skip if !pageValid already from previous pass
-          if (pageOrderPolicies.contains('$currentPage|$nextPage')) {
-            pageValid &= true;
-            print('currentPage: $currentPage nextPage: $nextPage '
-                'setting true');
-          } else {
-            pageValid = false;
-            print('currentPage: $currentPage nextPage: $nextPage '
-                'pageValid: $pageValid');
-          }
-          // could break out after one bad page but I'm lazy
-        }
-        print('currentPage: $currentPage pagevalid: $pageValid');
-        pageSetValid &= pageValid;
-        // could quit looking at this page set if false but I'm lazy
-      }
-      pageSetValidity.add(pageSetValid);
-      print('pageset: $pageSet pagesetvalid: $pageSetValid');
+    final pageSetValidity = <bool>[];
+    for (var i = 0; i < dataSet.length; i++) {
+      pageSetValidity.add(dataSet[i].equals(sortedSets[i]));
     }
-    print('$pageSetValidity');
     return pageSetValidity;
   }
 
@@ -113,24 +88,17 @@ class Day05 extends GenericDay {
     return pageSum;
   }
 
-  /// Reorder the pages in all the page sets to be in valid orders
-  /// return them all so we get a list of page sets that aref all valid
-  List<List<String>> reorderAllSetsToValid({
+  /// brute force just force sort everything
+  /// by sorting each one no matter what the state
+  List<List<String>> sortAllSets({
     required List<List<String>> dataSet,
     required List<String> pageOrderRules,
-    required List<bool> validitySet,
   }) {
     final allValidPageSets = <List<String>>[];
     for (var i = 0; i < dataSet.length; i++) {
-      if (validitySet[i]) {
-        // no changes required
-        allValidPageSets.add(dataSet[i]);
-      } else {
-        // shuffle the invalid set
-        allValidPageSets.add(
-          reorderOneSet(pageSet: dataSet[i], pageOrderRules: pageOrderRules),
-        );
-      }
+      allValidPageSets.add(
+        reorderOneSet(pageSet: dataSet[i], pageOrderRules: pageOrderRules),
+      );
     }
     return allValidPageSets;
   }
@@ -141,12 +109,8 @@ class Day05 extends GenericDay {
     required List<String> pageOrderRules,
   }) {
     // sort the page set based on the transitions mappings
-    //print('transitions: $transitions');
     final sortedPageSet =
         pageSet.sorted((a, b) => compareViaTransitions(a, b, pageOrderRules));
-    //print('sorted transitions $sortedPageSet');
-    // do some graph navigation thing
-    // I GIVE UP
     return sortedPageSet;
   }
 

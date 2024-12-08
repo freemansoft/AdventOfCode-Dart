@@ -46,37 +46,6 @@ void main() {
       );
     });
 
-    test('AbsoluteCoordinate', () {
-      const coord = AbsoluteCoordinate(row: 2, col: 3);
-      expect(coord.row, equals(2));
-      expect(coord.col, equals(3));
-      const coord2 = AbsoluteCoordinate(row: 2, col: 3);
-      expect(coord, equals(coord2));
-      const coord3 = AbsoluteCoordinate(row: 3, col: 3);
-      expect(coord, isNot(coord3));
-
-      const coord4 = OffsetCoordinate(row: 2, col: 3);
-      expect(coord, isNot(coord4));
-    });
-
-    test('Offsetoordinate', () {
-      const coord = OffsetCoordinate(row: 2, col: 3);
-      expect(coord.row, equals(2));
-      expect(coord.col, equals(3));
-      const coord2 = OffsetCoordinate(row: 2, col: 3);
-      expect(coord, equals(coord2));
-      const coord3 = OffsetCoordinate(row: 3, col: 3);
-      expect(coord, isNot(coord3));
-
-      const coord4 = AbsoluteCoordinate(row: 2, col: 3);
-      expect(coord, isNot(coord4));
-
-      expect(
-        coord.absoluteFrom(const AbsoluteCoordinate(row: 1, col: 1)),
-        equals(const AbsoluteCoordinate(row: 3, col: 4)),
-      );
-    });
-
     test('find positionsOf', () {
       final board = Board<String>(
         field: [
@@ -108,6 +77,57 @@ void main() {
       expect(
         foundLocations.contains(const AbsoluteCoordinate(row: 2, col: 2)),
         isFalse,
+      );
+    });
+
+    test('find positionsOfAll', () {
+      final board = Board<String>(
+        field: [
+          ['.', 'A', '.'],
+          ['.', 'A', 'O'],
+          ['A', 'O', '.'],
+        ],
+      ); // Assuming Board is a class you want to test
+
+      final allTypes = board.positionsOfAll(ignoreValue: '.');
+      expect(allTypes.length, equals(2));
+      expect(allTypes, contains('A'));
+      expect(allTypes['A']!.length, equals(3));
+      expect(allTypes, contains('O'));
+      expect(allTypes['O']!.length, equals(2));
+      expect(allTypes, isNot(contains('.')));
+    });
+  });
+
+  group('Coordinate Tests', () {
+    test('AbsoluteCoordinate', () {
+      const coord = AbsoluteCoordinate(row: 2, col: 3);
+      expect(coord.row, equals(2));
+      expect(coord.col, equals(3));
+      const coord2 = AbsoluteCoordinate(row: 2, col: 3);
+      expect(coord, equals(coord2));
+      const coord3 = AbsoluteCoordinate(row: 3, col: 3);
+      expect(coord, isNot(coord3));
+
+      const coord4 = OffsetCoordinate(row: 2, col: 3);
+      expect(coord, isNot(coord4));
+    });
+
+    test('Offsetoordinate', () {
+      const coord = OffsetCoordinate(row: 2, col: 3);
+      expect(coord.row, equals(2));
+      expect(coord.col, equals(3));
+      const coord2 = OffsetCoordinate(row: 2, col: 3);
+      expect(coord, equals(coord2));
+      const coord3 = OffsetCoordinate(row: 3, col: 3);
+      expect(coord, isNot(coord3));
+
+      const coord4 = AbsoluteCoordinate(row: 2, col: 3);
+      expect(coord, isNot(coord4));
+
+      expect(
+        coord.absoluteFrom(const AbsoluteCoordinate(row: 1, col: 1)),
+        equals(const AbsoluteCoordinate(row: 3, col: 4)),
       );
     });
   });
