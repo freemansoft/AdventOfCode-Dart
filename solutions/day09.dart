@@ -49,6 +49,7 @@ class Day09 extends GenericDay {
     return checksum(expandedBlocks);
   }
 
+  // converts the compacted format to an expanded version
   List<String> expandThisSucka(String inputString) {
     // expand the blocks
     // this cannot handle a blank line
