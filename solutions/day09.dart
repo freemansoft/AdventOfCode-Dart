@@ -17,18 +17,21 @@ class Day09 extends GenericDay {
         'out of ${expandedBlocks.length}');
 
     // just what we can use
-    // these are reversed
+    // these are reversed because we consume in reverse order, from the back
     final replacementBlocks = expandedBlocks.reversed.toList()
       ..removeWhere((aValue) => aValue == '.');
     var scanIndex = 0;
     var replacementIndex = 0;
     // the blocks after filling in
     final compactedBlocks = <String>[];
+    // while compacted size is ot yet the size of everthing in replacement list
     while (compactedBlocks.length < replacementBlocks.length) {
+      // everwhere there is a who, copy the furthest back into this slot
       if (expandedBlocks[scanIndex] == '.') {
         compactedBlocks.add(replacementBlocks[replacementIndex]);
         replacementIndex += 1;
       } else {
+        // retain the previous if it is not an empty space
         compactedBlocks.add(expandedBlocks[scanIndex]);
       }
       scanIndex += 1;
