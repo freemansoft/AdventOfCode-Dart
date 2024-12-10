@@ -14,14 +14,22 @@ class Day10 extends GenericDay {
     final board = parseInput();
     final trailheads = board.positionsOf(0).toList();
     // number of nines for each trailhead
-    final foundNines =
-        trailheads.map((e) => takingItToTheNines(board, e)).toList();
+    final foundNines = trailheads
+        .map((e) =>
+            takingItToTheNines(board, e, pAlgo: PathAlgorithm.uniqueEndpoints))
+        .toList();
     return foundNines.map((toElement) => toElement.length).sum;
   }
 
   @override
   int solvePart2() {
-    return 0;
+    final board = parseInput();
+    final trailheads = board.positionsOf(0).toList();
+    // number of nines for each trailhead
+    final foundNines = trailheads
+        .map((e) => takingItToTheNines(board, e, pAlgo: PathAlgorithm.allPaths))
+        .toList();
+    return foundNines.map((toElement) => toElement.length).sum;
   }
 
   /// from a starting point, find all the 9s.
@@ -29,6 +37,7 @@ class Day10 extends GenericDay {
     Board<int> board,
     AbsoluteCoordinate startingLocation, {
     int endingValue = 9,
+    PathAlgorithm pAlgo = PathAlgorithm.uniqueEndpoints,
   }) {
     print(startingLocation);
     var locations = [startingLocation];
@@ -41,8 +50,10 @@ class Day10 extends GenericDay {
             ),
           )
           .flattened
-          .toSet()
           .toList();
+      if (pAlgo == PathAlgorithm.uniqueEndpoints) {
+        locations = locations.toSet().toList();
+      }
       print('step ${board.getValueAtPosition(position: locations[0])} '
           'count: ${locations.length} '
           'from: $startingLocation '
@@ -51,3 +62,5 @@ class Day10 extends GenericDay {
     return locations;
   }
 }
+
+enum PathAlgorithm { uniqueEndpoints, allPaths }
