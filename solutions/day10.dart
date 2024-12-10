@@ -14,7 +14,8 @@ class Day10 extends GenericDay {
     final board = parseInput();
     final trailheads = board.positionsOf(0).toList();
     // number of nines for each trailhead
-    final foundNines = trailheads.map((e) => doSomething(board, e)).toList();
+    final foundNines =
+        trailheads.map((e) => takingItToTheNines(board, e)).toList();
     return foundNines.map((toElement) => toElement.length).sum;
   }
 
@@ -24,10 +25,14 @@ class Day10 extends GenericDay {
   }
 
   /// from a starting point, find all the 9s.
-  List<AbsoluteCoordinate> doSomething(Board<int> board, AbsoluteCoordinate e) {
-    print(e);
-    var locations = [e];
-    while ((board.getValueAtPosition(position: locations[0])) != 9) {
+  List<AbsoluteCoordinate> takingItToTheNines(
+    Board<int> board,
+    AbsoluteCoordinate startingLocation, {
+    int endingValue = 9,
+  }) {
+    print(startingLocation);
+    var locations = [startingLocation];
+    while ((board.getValueAtPosition(position: locations[0])) != endingValue) {
       locations = locations
           .map(
             (start) => board.adjacentWhere(
@@ -39,7 +44,9 @@ class Day10 extends GenericDay {
           .toSet()
           .toList();
       print('step ${board.getValueAtPosition(position: locations[0])} '
-          'count: ${locations.length} from: $e ended at: $locations');
+          'count: ${locations.length} '
+          'from: $startingLocation '
+          'ended at: $locations');
     }
     return locations;
   }
