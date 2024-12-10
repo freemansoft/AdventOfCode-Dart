@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import '../utils/index.dart';
 
 class Day09 extends GenericDay {

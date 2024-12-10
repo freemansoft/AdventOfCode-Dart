@@ -15,8 +15,13 @@ class Day10 extends GenericDay {
     final trailheads = board.positionsOf(0).toList();
     // number of nines for each trailhead
     final foundNines = trailheads
-        .map((e) =>
-            takingItToTheNines(board, e, pAlgo: PathAlgorithm.uniqueEndpoints))
+        .map(
+          (e) => takingItToTheNines(
+            board, e,
+            // ignore: avoid_redundant_argument_values
+            pAlgo: PathAlgorithm.uniqueEndpoints,
+          ),
+        )
         .toList();
     return foundNines.map((toElement) => toElement.length).sum;
   }
