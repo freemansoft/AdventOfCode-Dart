@@ -349,8 +349,32 @@ class Board<T> {
       );
   }
 
-  /// Returns all positional neighbours of a point. This includes the adjacent
-  /// **AND** diagonal neighbours.
+  /// Returns all adjacent of a point that have the searched value
+  /// This does **NOT** include diagonal neighbours.
+  Iterable<AbsoluteCoordinate> adjacentWhere(Coordinate target, T searched) {
+    return <AbsoluteCoordinate>{
+      AbsoluteCoordinate(row: target.row - 1, col: target.col),
+      AbsoluteCoordinate(row: target.row, col: target.col + 1),
+      AbsoluteCoordinate(row: target.row + 1, col: target.col),
+      AbsoluteCoordinate(row: target.row, col: target.col - 1),
+    }
+      ..removeWhere(
+        (position) {
+          return position.row < 0 ||
+              position.col < 0 ||
+              position.col >= boardWidth ||
+              position.row >= boardHeight;
+        },
+      )
+      ..removeWhere(
+        (position) {
+          return board[position.row][position.col] != searched;
+        },
+      );
+  }
+
+  /// Returns all positional neighbours of a point.
+  /// This includes the adjacent **AND** diagonal neighbours.
   Iterable<AbsoluteCoordinate> neighbours(Coordinate target) {
     return <AbsoluteCoordinate>{
       AbsoluteCoordinate(row: target.row - 1, col: target.col),
@@ -395,9 +419,6 @@ class Board<T> {
       )
       ..removeWhere(
         (position) {
-          // print('$position: '
-          //     '${board[position.row][position.col]} != $searched '
-          //     '${board[position.row][position.col] != searched} ');
           return board[position.row][position.col] != searched;
         },
       );
@@ -465,10 +486,18 @@ extension IntegerBoard on Board<int> {
 
   /// Convenience method to create a Field from a single String, where the
   /// String is a "block" of integers.
-  static Board<int> fromString(String string) {
+  static Board<int> fromString(String string, {int? unparsableValue}) {
     final lines = string
         .split('\n')
-        .map((line) => line.trim().split('').map(int.parse).toList())
+        .map((line) => line
+            .trim()
+            .split('')
+            .map(
+              (e) => int.tryParse(e) != null
+                  ? int.parse(e)
+                  : (unparsableValue ?? int.parse(e)),
+            )
+            .toList())
         .toList();
     return Board(field: lines);
   }

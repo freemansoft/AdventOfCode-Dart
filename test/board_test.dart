@@ -46,6 +46,47 @@ void main() {
       );
     });
 
+    test('adjacentWhere', () {
+      // the board has one that shouldn't be returned
+      final board = Board<String>(
+        field: [
+          ['00', '01', '02'],
+          ['XX', '11', 'XX'],
+          ['XX', '21', '22'],
+        ],
+      );
+
+      final found =
+          board.adjacentWhere(const AbsoluteCoordinate(row: 1, col: 1), 'XX');
+      expect(
+        found.length,
+        equals(2),
+      );
+      expect(found.contains(const AbsoluteCoordinate(row: 1, col: 0)), isTrue);
+      expect(found.contains(const AbsoluteCoordinate(row: 1, col: 2)), isTrue);
+    });
+
+    test('neighborsWhere', () {
+      // the board has one that shouldn't be returned
+      final board = Board<String>(
+        field: [
+          ['00', '01', '02'],
+          ['XX', '11', 'XX'],
+          ['XX', '21', '22'],
+        ],
+      );
+
+      final found =
+          board.neighboursWhere(const AbsoluteCoordinate(row: 1, col: 1), 'XX');
+      expect(
+        found.length,
+        equals(3),
+      );
+      expect(found.contains(const AbsoluteCoordinate(row: 1, col: 0)), isTrue);
+      expect(found.contains(const AbsoluteCoordinate(row: 1, col: 2)), isTrue);
+      expect(found.contains(const AbsoluteCoordinate(row: 2, col: 0)), isTrue);
+    });
+
     test('find positionsOf', () {
       final board = Board<String>(
         field: [
