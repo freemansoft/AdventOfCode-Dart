@@ -44,6 +44,8 @@ class Day02 extends GenericDay {
         'vs descending ${intCells[i]}, ${sortedDecreasing[i]} === vs'
         ' ascending ${intCells[i]}, ${sortedIncreasing[i]}',
       );
+      // we compare the sorted list against the lists to see if they match
+      // they must be all increasing or all decreasing
       if (sortedDecreasing[i].equals(intCells[i])) {
         for (var j = 0; j < intCells[i].length - 1; j++) {
           final difference =
@@ -69,8 +71,12 @@ class Day02 extends GenericDay {
     return numGood;
   }
 
+  /// not solved
   @override
   int solvePart2() {
-    return 0;
+    parseInput();
+    print(intCells);
+
+    return -1;
   }
 }

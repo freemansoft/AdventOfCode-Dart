@@ -489,15 +489,17 @@ extension IntegerBoard on Board<int> {
   static Board<int> fromString(String string, {int? unparsableValue}) {
     final lines = string
         .split('\n')
-        .map((line) => line
-            .trim()
-            .split('')
-            .map(
-              (e) => int.tryParse(e) != null
-                  ? int.parse(e)
-                  : (unparsableValue ?? int.parse(e)),
-            )
-            .toList())
+        .map(
+          (line) => line
+              .trim()
+              .split('')
+              .map(
+                (e) => int.tryParse(e) != null
+                    ? int.parse(e)
+                    : (unparsableValue ?? int.parse(e)),
+              )
+              .toList(),
+        )
         .toList();
     return Board(field: lines);
   }
