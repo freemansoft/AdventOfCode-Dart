@@ -12,9 +12,7 @@ class Day11 extends GenericDay {
   int solvePart1() {
     final ourInts = parseInput();
 
-    const blinkTarget = 25;
-
-    final listOneMap = loopIt(ourInts, blinkTarget);
+    final listOneMap = loopIt(ourInts, 25);
     return listOneMap.entries.fold<int>(
         0, (previousValue, mapEntry) => previousValue + mapEntry.value);
   }
@@ -23,26 +21,21 @@ class Day11 extends GenericDay {
   int solvePart2() {
     final ourInts = parseInput();
 
-    const blinkTarget = 75;
-
-    final listOneMap = loopIt(ourInts, blinkTarget);
+    final listOneMap = loopIt(ourInts, 75);
     return listOneMap.entries.fold<int>(
         0, (previousValue, mapEntry) => previousValue + mapEntry.value);
   }
 
-  Map<int, int> loopIt(List<int> ourInts, int blinkTarget) {
-    final listOne = ourInts;
-    print('$listOne');
+  Map<int, int> loopIt(List<int> listOne, int blinkTarget) {
+    print('starting list $listOne');
 
-    final foo = listOne.map(
-      (toElement) => MapEntry<int, int>(toElement, 1),
-    );
-    var listOneMap = Map<int, int>.fromEntries(foo);
+    // convert the list of elements to a map {the value, 1}
+    var listOneMap = {for (final element in listOne) element: 1};
 
     for (var blinkCount = 0; blinkCount < blinkTarget; blinkCount++) {
-      // value, count
+      // Map {the value, number of times it occurs}
       final listTwo = <int, int>{};
-      print('starting $blinkCount map $listOneMap');
+      //print('starting $blinkCount map $listOneMap');
       for (final anEntry in listOneMap.entries) {
         final anInt = anEntry.key;
         if (anInt == 0) {
@@ -67,9 +60,9 @@ class Day11 extends GenericDay {
       }
 
       listOneMap = listTwo;
-      print('after : ${blinkCount + 1} '
-          'count : ${listTwo.entries.fold<int>(0, (previousValue, mapEntry) => previousValue + mapEntry.value)} '
-          'current  $listTwo');
+      // print('after : ${blinkCount + 1} '
+      //     'count : ${listTwo.entries.fold<int>(0, (previousValue, mapEntry) => previousValue + mapEntry.value)} '
+      //     'current  $listTwo');
     }
     return listOneMap;
   }
