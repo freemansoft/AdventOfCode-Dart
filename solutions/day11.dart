@@ -14,7 +14,9 @@ class Day11 extends GenericDay {
 
     final listOneMap = loopIt(ourInts, 25);
     return listOneMap.entries.fold<int>(
-        0, (previousValue, mapEntry) => previousValue + mapEntry.value);
+      0,
+      (previousValue, mapEntry) => previousValue + mapEntry.value,
+    );
   }
 
   @override
@@ -23,7 +25,9 @@ class Day11 extends GenericDay {
 
     final listOneMap = loopIt(ourInts, 75);
     return listOneMap.entries.fold<int>(
-        0, (previousValue, mapEntry) => previousValue + mapEntry.value);
+      0,
+      (previousValue, mapEntry) => previousValue + mapEntry.value,
+    );
   }
 
   Map<int, int> loopIt(List<int> listOne, int blinkTarget) {

@@ -223,7 +223,7 @@ class StepCoordinate {
 }
 
 /// A callback that takes a [Coordinate]
-typedef VoidFieldCallback = void Function(Coordinate position);
+typedef VoidFieldCallback = void Function(AbsoluteCoordinate position);
 
 /// A helper class for easier work with 2D data.
 /// 1. expects a data structure to be in row major order
@@ -300,7 +300,7 @@ class Board<T> {
 
   /// Executes the given callback for the passed in positions.
   void forPositions(
-    Iterable<Coordinate> positions,
+    Iterable<AbsoluteCoordinate> positions,
     VoidFieldCallback callback,
   ) {
     for (final position in positions) {
