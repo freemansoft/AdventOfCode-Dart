@@ -35,7 +35,7 @@ class Day12 extends GenericDay {
       },
     );
     // area *
-    final sharedSides = 1;
+    const sharedSides = 1;
     return poolResult
         .map(
           (aPool) =>
@@ -57,17 +57,20 @@ class Day12 extends GenericDay {
       processed.add(location);
       // print(
       //     'processThis found ${board.adjacentWhere(location, aValue).toList()}');
-      return [location]..addAll(board
-          .adjacentWhere(location, aValue)
-          .map(
-            (relatedLocation) => processThis(
-              board,
-              relatedLocation,
-              processed,
-            ),
-          )
-          .flattened
-          .toList());
+      return [
+        location,
+        ...board
+            .adjacentWhere(location, aValue)
+            .map(
+              (relatedLocation) => processThis(
+                board,
+                relatedLocation,
+                processed,
+              ),
+            )
+            .flattened
+            .toList()
+      ];
     } else {
       return [];
     }
