@@ -55,8 +55,8 @@ class Day12 extends GenericDay {
     final aValue = board.getValueAtPosition(position: location);
     if (!processed.contains(location)) {
       processed.add(location);
-      // print(
-      //     'processThis found ${board.adjacentWhere(location, aValue).toList()}');
+      // print('processThis found'
+      //     ' ${board.adjacentWhere(location, aValue).toList()}');
       return [
         location,
         ...board
@@ -69,7 +69,8 @@ class Day12 extends GenericDay {
               ),
             )
             .flattened
-            .toList()
+        //.toList()
+        ,
       ];
     } else {
       return [];

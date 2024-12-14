@@ -71,8 +71,8 @@ class Day13 extends GenericDay {
         if (anAttempt.prize.x == anAttemptX &&
             anAttempt.prize.y == anAttemptY) {
           final newCost = aCount * aCost + bCount * bCost;
-          print(
-              'found $anAttempt cost $newCost  why(button A press count $aCount, '
+          print('found $anAttempt cost $newCost  '
+              'why(button A press count $aCount, '
               'button B press count $bCount) '
               'resulted in $anAttemptX , $anAttemptY');
           if (minCost == 0 || newCost < minCost) {
