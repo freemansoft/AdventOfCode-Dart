@@ -35,7 +35,6 @@ class Day12 extends GenericDay {
       },
     );
     // area *
-    const sharedSides = 1;
     return poolResult
         .map(
           (aPool) =>

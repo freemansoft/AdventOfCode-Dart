@@ -145,6 +145,10 @@ class CoordinatePair {
 class OffsetInboundTransition
     extends Transition<OffsetCoordinate, AbsoluteCoordinate> {
   const OffsetInboundTransition({required super.from, required super.to});
+  @override
+  String toString() {
+    return '{ "relative": $from , "into": $to}';
+  }
 }
 
 /// used for oubound transitions relative from a square
@@ -153,6 +157,41 @@ class OffsetInboundTransition
 class OffsetOutboundTransition
     extends Transition<AbsoluteCoordinate, OffsetCoordinate> {
   const OffsetOutboundTransition({required super.from, required super.to});
+
+  OffsetOutboundTransition moveBy(
+    int count, {
+    int wrapWidth = 0,
+    int wrapHeight = 0,
+  }) {
+    var newRow = from.row + count * to.row;
+    var newCol = from.col + count * to.col;
+    if (wrapWidth > 0) {
+      if (newCol < 0) {
+        newCol = newCol + ((newCol.abs() ~/ wrapWidth) * wrapWidth) + wrapWidth;
+      }
+      if (newCol >= wrapWidth) newCol = newCol % wrapWidth;
+    }
+    if (wrapHeight > 0) {
+      if (newRow < 0) {
+        newRow =
+            newRow + ((newRow.abs() ~/ wrapHeight) * wrapHeight) + wrapHeight;
+      }
+      if (newRow >= wrapHeight) newRow = newRow % wrapHeight;
+    }
+
+    return OffsetOutboundTransition(
+      from: AbsoluteCoordinate(
+        row: newRow,
+        col: newCol,
+      ),
+      to: to,
+    );
+  }
+
+  @override
+  String toString() {
+    return '{ "from": $from , "relative": $to}';
+  }
 }
 
 /// an entry path and the relative exit paths for that entry
