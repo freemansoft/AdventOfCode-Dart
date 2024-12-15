@@ -31,12 +31,17 @@ class Day14 extends GenericDay {
     final bots = parseInput();
     print('${bots.length} - $bots');
     final finalBots = bots
-        .map((aBot) =>
-            aBot.moveBy(seconds, wrapWidth: sizeWidth, wrapHeight: sizeHeight))
+        .map(
+          (aBot) => aBot.moveBy(
+            seconds,
+            wrapWidth: sizeWidth,
+            wrapHeight: sizeHeight,
+          ),
+        )
         .toList();
     final finalBotPositions = finalBots.map((e) => e.from);
-    print(
-        'final bot ${finalBotPositions.length} positions\n ${finalBotPositions.toList()}');
+    print('final bot ${finalBotPositions.length} '
+        'positions\n ${finalBotPositions.toList()}');
 
     // build the bounding boxes
     final quadBoxes = [

@@ -64,9 +64,6 @@ class Day11 extends GenericDay {
       }
 
       listOneMap = listTwo;
-      // print('after : ${blinkCount + 1} '
-      //     'count : ${listTwo.entries.fold<int>(0, (previousValue, mapEntry) => previousValue + mapEntry.value)} '
-      //     'current  $listTwo');
     }
     return listOneMap;
   }
