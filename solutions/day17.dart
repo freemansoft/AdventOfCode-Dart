@@ -6,7 +6,7 @@ class Day17 extends GenericDay {
   Day17() : super(17);
 
   @override
-  parseInput() {
+  void parseInput() {
     final fullProgram = InputUtil(17).getParagraphLines();
     final registerAString = fullProgram[0][0].split(':')[1].substring(1);
     registers[0] = int.parse(registerAString);
