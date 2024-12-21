@@ -282,6 +282,16 @@ class Board<T> {
           (row) => List<T>.generate(field[0].length, (col) => field[row][col]),
         );
 
+  // build a board of a given size filled with a given value
+  factory Board.filled({
+    required int width,
+    required int height,
+    required T fill,
+  }) {
+    final fillField = List<List<T>>.filled(height, List<T>.filled(width, fill));
+    return Board<T>(field: fillField);
+  }
+
   final List<List<T>> board;
 
   int get boardWidth => board.length;
