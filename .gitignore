@@ -4,3 +4,6 @@
 .packages
 build/
 input/hold
+
+# I'm not using the tests
+test/
